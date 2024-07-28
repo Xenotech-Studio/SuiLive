@@ -38,6 +38,8 @@ public class ConnectViaCode : MonoBehaviour
     
     public UnityEvent OnConnectSuccess;
 
+    public UnityEvent<Dm> OnDanmaku;
+
     public async void LinkStart(string code)
     {
         //测试的密钥
