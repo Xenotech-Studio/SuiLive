@@ -11,7 +11,7 @@ using OpenBLive.Runtime.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ConnectViaCode : MonoBehaviour
+public partial class ConnectViaCode : MonoBehaviour
 {
     public static ConnectViaCode Instance
     {
@@ -39,6 +39,7 @@ public class ConnectViaCode : MonoBehaviour
     public UnityEvent OnConnectSuccess;
 
     public UnityEvent<Dm> OnDanmaku;
+    public UnityEvent<SendGift> OnGift;
 
     public async void LinkStart(string code)
     {
@@ -121,6 +122,7 @@ public class ConnectViaCode : MonoBehaviour
 
     private void WebSocketBLiveClientOnGift(SendGift sendGift)
     {
+        OnGift?.Invoke(sendGift);
         StringBuilder sb = new StringBuilder("收到礼物!");
         sb.AppendLine();
         sb.Append("来自用户：");
@@ -129,6 +131,8 @@ public class ConnectViaCode : MonoBehaviour
         sb.Append(sendGift.giftNum);
         sb.Append("个");
         sb.Append(sendGift.giftName);
+        sb.Append("ID");
+        sb.Append(sendGift.giftId);
         sb.Append("价值");
         sb.Append(sendGift.price);
         Debug.Log(sb);
@@ -160,12 +164,14 @@ public class ConnectViaCode : MonoBehaviour
 
     private void Update()
     {
-#if !UNITY_WEBGL || UNITY_EDITOR
+        #if !UNITY_WEBGL || UNITY_EDITOR
         if (m_WebSocketBLiveClient is { ws: { State: WebSocketState.Open } })
         {
             m_WebSocketBLiveClient.ws.DispatchMessageQueue();
         }
-#endif
+        #endif
+        
+        TestUpdate();
     }
 
     private void OnDestroy()
