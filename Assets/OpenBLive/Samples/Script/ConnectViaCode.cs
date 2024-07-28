@@ -136,6 +136,7 @@ public class ConnectViaCode : MonoBehaviour
 
     private void WebSocketBLiveClientOnDanmaku(Dm dm)
     {
+        OnDanmaku?.Invoke(dm);
         StringBuilder sb = new StringBuilder("收到弹幕!");
         sb.AppendLine();
         sb.Append("用户：");
