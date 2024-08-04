@@ -13,7 +13,7 @@ using System.Net;
 
 namespace OpenBLive.Runtime.Data
 {
-    public struct Packet
+    public partial struct Packet
     {
         private static readonly Packet s_NoBodyHeartBeatPacket = new Packet()
         {

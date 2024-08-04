@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenBLive.Runtime.Data;
 using OpenBLive.Runtime.Utilities;
+using UnityEngine;
 
 namespace OpenBLive.Runtime
 {
@@ -152,6 +153,7 @@ namespace OpenBLive.Runtime
             var data = json["data"]!.ToString();
             try
             {
+                Debug.Log("**********" + json["cmd"]?.ToString());
                 switch (json["cmd"]?.ToString())
                 {
                     case "LIVE_OPEN_PLATFORM_DM":
