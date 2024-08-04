@@ -7345,10 +7345,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u8BDD\u9898\u8BDD\u9898\u8BDD\u9898\u8BDD\u9898\u8BDD\u9898\u8BDD\u9898"
+  m_text: "\u8BDD\u9898\u8BDD\u9898\u8BDD\u9898\u8BDD\u9898\u8BDD\u9898"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 466c440f6e57a441584cf66f88dd78ee, type: 2}
-  m_sharedMaterial: {fileID: -1648108538885070939, guid: 466c440f6e57a441584cf66f88dd78ee,
+  m_fontAsset: {fileID: 11400000, guid: 948df7190131c4872bb9ba326ebe3110, type: 2}
+  m_sharedMaterial: {fileID: -1648108538885070939, guid: 948df7190131c4872bb9ba326ebe3110,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -7373,13 +7373,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.24
-  m_fontSizeBase: 22.24
+  m_fontSize: 25.6
+  m_fontSizeBase: 25.6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
