@@ -27,6 +27,7 @@ public partial class ConnectViaCode : MonoBehaviour
     private static ConnectViaCode instance;
     // Start is called before the first frame update
     private WebSocketBLiveClient m_WebSocketBLiveClient;
+    private WebSocketBLiveWebRoomClient m_WebSocketBLiveWebRoomClient;
     private InteractivePlayHeartBeat m_PlayHeartBeat;
     private string gameId;
     public string accessKeySecret;
@@ -40,6 +41,41 @@ public partial class ConnectViaCode : MonoBehaviour
 
     public UnityEvent<Dm> OnDanmaku;
     public UnityEvent<SendGift> OnGift;
+
+    public async void WebRoomLinkStart()
+    {
+        int roomId = 24910329;
+        
+        var ret = await BApi.GetWebRoomInfo( roomId: roomId );
+        Debug.Log("WebRoom: 获取房间信息: " + ret);
+        var resObj = JsonConvert.DeserializeObject<WebRoomStartInfo>(ret);
+        if (resObj.Code != 0)
+        {
+            Debug.LogError(resObj.Message);
+            ConnectFailure?.Invoke();
+            return;
+        }
+        else
+        {
+            Debug.Log("WebRoom: 获取房间信息成功: " + "\ntoken: " + resObj.GetAuthBody());
+        }
+        
+        m_WebSocketBLiveWebRoomClient = new WebSocketBLiveWebRoomClient(resObj.GetWssLink(), resObj.GetAuthBody(), roomId);
+        
+        try
+        {
+            m_WebSocketBLiveWebRoomClient.Connect(TimeSpan.FromSeconds(1), 5);
+            //ConnectSuccess?.Invoke();
+            Debug.Log("WebRoom: 连接成功");
+            OnConnectSuccess?.Invoke();
+        }
+        catch (Exception ex)
+        {
+            //ConnectFailure?.Invoke();
+            Debug.Log("WebRoom: 连接失败");
+            throw;
+        }
+    }
 
     public async void LinkStart(string code)
     {
@@ -90,6 +126,7 @@ public partial class ConnectViaCode : MonoBehaviour
     public async Task LinkEnd()
     {
         m_WebSocketBLiveClient.Dispose();
+        m_WebSocketBLiveWebRoomClient.Dispose();
         m_PlayHeartBeat.Dispose();
         await BApi.EndInteractivePlay(appId, gameId);
         Debug.Log("游戏关闭");
@@ -169,6 +206,10 @@ public partial class ConnectViaCode : MonoBehaviour
         {
             m_WebSocketBLiveClient.ws.DispatchMessageQueue();
         }
+        if (m_WebSocketBLiveWebRoomClient is { ws: { State: WebSocketState.Open } })
+        {
+            m_WebSocketBLiveWebRoomClient.ws.DispatchMessageQueue();
+        }
         #endif
         
         TestUpdate();
@@ -176,10 +217,15 @@ public partial class ConnectViaCode : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (m_WebSocketBLiveClient == null)
-            return;
+        if (m_WebSocketBLiveClient != null)
+        {
+            m_PlayHeartBeat.Dispose();
+            m_WebSocketBLiveClient.Dispose();
+        }
 
-        m_PlayHeartBeat.Dispose();
-        m_WebSocketBLiveClient.Dispose();
+        if (m_WebSocketBLiveWebRoomClient != null)
+        {
+            m_WebSocketBLiveWebRoomClient.Dispose();
+        }
     }
 }

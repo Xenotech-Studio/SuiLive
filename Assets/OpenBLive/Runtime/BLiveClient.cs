@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +29,7 @@ namespace OpenBLive.Runtime
 
     public abstract class BLiveClient : IDisposable
     {
-        private Timer m_Timer;
+        protected Timer m_Timer;
         protected string token;
 
         /// <summary>
@@ -86,16 +89,12 @@ namespace OpenBLive.Runtime
             m_Timer = new Timer((e) => (
                 (BLiveClient)e)?.SendAsync(Packet.HeartBeat()), this, 0, 30 * 1000);
         }
-#if UNITY_2021_2_OR_NEWER || NET5_0_OR_GREATER
+        
         protected void ProcessPacket(ReadOnlySpan<byte> bytes) =>
             ProcessPacketAsync(new Packet(bytes));
-#else
-        protected void ProcessPacket(byte[] bytes) =>
-            ProcessPacketAsync(new Packet(bytes));
-#endif
 
 
-        private void ProcessPacketAsync(Packet packet)
+        private async void ProcessPacketAsync(Packet packet)
         {
             var header = packet.Header;
             switch (header.ProtocolVersion)
@@ -104,14 +103,17 @@ namespace OpenBLive.Runtime
                 case ProtocolVersion.HeartBeat:
                     break;
                 case ProtocolVersion.Zlib:
+                    Debug.Log("WebRoom: Zlib Message");
                     //no Zlib compress in OpenBLive wss
                     //await foreach (var packet1 in ZlibDeCompressAsync(packet.PacketBody))
                     //ProcessPacketAsync(packet1);
                     return;
                 case ProtocolVersion.Brotli:
-                    //no Brotli compress in OpenBLive wss
-                    //await foreach (var packet1 in BrotliDecompressAsync(packet.PacketBody))
-                    //ProcessPacketAsync(packet1);
+                    Debug.Log("WebRoom: Brotli Message " + header.Operation);
+                    await foreach (var packet1 in BrotliDecompressAsync(packet.PacketBody))
+                    {
+                        ProcessPacketAsync(new Packet(packet1));
+                    }
                     return;
                 default:
                     throw new NotSupportedException(
@@ -126,11 +128,7 @@ namespace OpenBLive.Runtime
                 case Operation.HeartBeatResponse:
                     Array.Reverse(packet.PacketBody);
 
-#if UNITY_2021_2_OR_NEWER || NET5_0_OR_GREATER
                     var popularity = BitConverter.ToInt32(packet.PacketBody);
-#else
-                    var popularity = BitConverter.ToInt32(packet.PacketBody, 0);
-#endif
 
                     UpdatePopularity?.Invoke(this, popularity);
                     break;
@@ -149,8 +147,10 @@ namespace OpenBLive.Runtime
         private void ProcessNotice(string rawMessage)
         {
             var json = JObject.Parse(rawMessage);
+            
             ReceiveNotice?.Invoke(rawMessage, json);
-            var data = json["data"]!.ToString();
+            var data = json["data"]?.ToString();
+            Debug.Log("WebRoom: ProcessNotice " + json);
             try
             {
                 Debug.Log("**********" + json["cmd"]?.ToString());
@@ -180,11 +180,31 @@ namespace OpenBLive.Runtime
                         var like = JsonConvert.DeserializeObject<Like>(data);
                         OnLike?.Invoke(like);
                         break;
+                    
+                    
+                    case "DANMU_MSG":
+                        Debug.Log("WebRoom: 弹幕 " + data);
+                        break;
                 }
             }
             catch (Exception e)
             {
                 Utilities.Logger.LogError("json数据解析异常 rawMessage: " + rawMessage + e.Message);
+            }
+        }
+        
+        async IAsyncEnumerable<byte[]> BrotliDecompressAsync(byte[] compressedData)
+        {
+            using var compressedStream = new MemoryStream(compressedData);
+            using var decompressor = new BrotliStream(compressedStream, CompressionMode.Decompress);
+
+            var buffer = new byte[4096];
+            int read;
+            while ((read = await decompressor.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            {
+                byte[] data = new byte[read];
+                Array.Copy(buffer, data, read);
+                yield return data;
             }
         }
     }

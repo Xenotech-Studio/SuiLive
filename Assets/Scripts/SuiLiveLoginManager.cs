@@ -108,6 +108,8 @@ public class SuiLiveLoginManager : MonoBehaviour
             ConnectViaCode.Instance.accessKeyId = IdentityDataDic[SelectedIdentity].AccessKeyId;
             ConnectViaCode.Instance.accessKeySecret = IdentityDataDic[SelectedIdentity].AccessKeySecret;
             ConnectViaCode.Instance.LinkStart(IdentityDataDic[SelectedIdentity].IdCode);
+            
+            ConnectViaCode.Instance.WebRoomLinkStart();
         }
     }
 

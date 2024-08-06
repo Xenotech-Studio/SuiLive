@@ -58,6 +58,22 @@ namespace OpenBLive.Runtime
 
         private const string k_Post = "POST";
 
+        private const string WebRoomDomain = "https://api.live.bilibili.com";
+        private const string k_WebRoomInfo = "/xlive/web-room/v1/index/getDanmuInfo";
+        
+        
+        public static async Task<string> GetWebRoomInfo(int roomId)
+        {
+            var builder = new UriBuilder(WebRoomDomain + k_WebRoomInfo);
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query["id"] = roomId.ToString();
+            builder.Query = query.ToString();
+            string url = builder.ToString();
+
+            var result = await RequestWebUTF8(url, "GET", "");
+            return result;
+        }
+
 
         public static async Task<string> StartInteractivePlay(string code, string appId)
         {

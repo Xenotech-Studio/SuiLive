@@ -127,6 +127,7 @@ public class BilibiliLoginManager : MonoBehaviour
     public virtual void StartToPlay()
     {
         ConnectViaCode.Instance?.LinkStart(IdCode);
+        ConnectViaCode.Instance?.WebRoomLinkStart();
         StartToPlayEvent?.Invoke();
     }
 

@@ -38,6 +38,8 @@ public class ChatDisplay : MonoBehaviour
     // Start is called before the first frame update
     public void ReceiveDamaku(Dm dm)
     {
+        if(gameObject.activeInHierarchy == false) gameObject.SetActive(true);
+        
         RectTransform newItem = Instantiate(Template, ListContentParent);
         newItem.gameObject.SetActive(true);
         newItem.name = $"DamakuItem ({counter}) - {dm.userName} - {dm.timestamp}"; 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 #if UNITY_2021_2_OR_NEWER || NET5_0_OR_GREATER
 using System.Buffers;
@@ -15,35 +16,7 @@ namespace OpenBLive.Runtime.Data
 {
     public partial struct Packet
     {
-        /*
-        /// <summary>
-        /// 生成验证用数据包
-        /// </summary>
-        /// <param name="token">http请求获取的token</param>
-        /// <param name="protocolVersion">协议版本</param>
-        /// <returns>验证请求数据包</returns>
-        public static Packet Authority(string token,
-           ProtocolVersion protocolVersion = ProtocolVersion.Brotli)
-        {
-           var obj = Encoding.UTF8.GetBytes(token);
-
-           return new Packet
-           {
-               Header = new PacketHeader
-               {
-                   Operation = Operation.Authority,
-                   ProtocolVersion = ProtocolVersion.HeartBeat,
-                   SequenceId = 1,
-                   HeaderLength = PacketHeader.KPacketHeaderLength,
-                   PacketLength = PacketHeader.KPacketHeaderLength + obj.Length
-               },
-               PacketBody = obj
-           };
-        }
-        */
-
-        
-        public static Packet WebRoomAuthority(int uid, int roomid, string token="",
+        public static Packet WebRoomAuthority(long uid=0, int roomid=0, string token="",
             ProtocolVersion protocolVersion = ProtocolVersion.Brotli)
         {
             var authInfo = new
@@ -51,10 +24,13 @@ namespace OpenBLive.Runtime.Data
                 uid = uid,
                 roomid = roomid,
                 protover = (int)protocolVersion,
+                buvid = "",
                 platform = "web",
                 type = 2,
                 key = token
             };
+            
+            Debug.Log("WebRoom: WebRoomAuthority\n"+JsonConvert.SerializeObject(authInfo));
 
             string json = JsonConvert.SerializeObject(authInfo);
             var obj = Encoding.UTF8.GetBytes(json);

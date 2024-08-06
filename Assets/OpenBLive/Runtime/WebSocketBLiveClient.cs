@@ -23,11 +23,7 @@ namespace OpenBLive.Runtime
         /// </summary>
         public IList<string> WssLink;
 
-#if NET5_0_OR_GREATER
-        public WebsocketClient clientWebSocket;
-#elif UNITY_2020_3_OR_NEWER
         public WebSocket ws;
-#endif
 
         public WebSocketBLiveClient(AppStartInfo info)
         {
@@ -45,7 +41,6 @@ namespace OpenBLive.Runtime
         }
 
 
-
         public override async void Connect()
         {
             var url = WssLink.FirstOrDefault();
@@ -53,23 +48,7 @@ namespace OpenBLive.Runtime
             {
                 throw new Exception("wsslink is invalid");
             }
-#if NET5_0_OR_GREATER
-            clientWebSocket?.Stop(WebSocketCloseStatus.Empty, string.Empty);
-            clientWebSocket?.Dispose();
-
-            clientWebSocket = new WebsocketClient(new Uri(url));
-            clientWebSocket.MessageReceived.Subscribe(e => ProcessPacket(e.Binary));
-            clientWebSocket.DisconnectionHappened.Subscribe(e =>
-            {
-                if (e.CloseStatus == WebSocketCloseStatus.Empty)
-                    Console.WriteLine("WS CLOSED");
-                else
-                    Console.WriteLine("WS ERROR: " + e.Exception.Message);
-            });
-            await clientWebSocket.Start();
-            if (clientWebSocket.IsStarted)
-                OnOpen();
-#elif UNITY_2020_3_OR_NEWER
+            
             //尝试释放已连接的ws
             if (ws != null && ws.State != WebSocketState.Closed)
             {
@@ -85,7 +64,6 @@ namespace OpenBLive.Runtime
             ws.OnError += msg => { Logger.LogError("WebSocket Error Message: " + msg); };
             ws.OnClose += code => { Logger.Log("WebSocket Close: " + code); };
             await ws.Connect();
-#endif
         }
 
 
@@ -97,23 +75,7 @@ namespace OpenBLive.Runtime
             {
                 throw new Exception("wsslink is invalid");
             }
-#if NET5_0_OR_GREATER
-            clientWebSocket?.Stop(WebSocketCloseStatus.Empty, string.Empty);
-            clientWebSocket?.Dispose();
-
-            clientWebSocket = new WebsocketClient(new Uri(url));
-            clientWebSocket.MessageReceived.Subscribe(e => ProcessPacket(e.Binary));
-            clientWebSocket.DisconnectionHappened.Subscribe(e =>
-            {
-                if (e.CloseStatus == WebSocketCloseStatus.Empty)
-                    Console.WriteLine("WS CLOSED");
-                else
-                    Console.WriteLine("WS ERROR: " + e.Exception.Message);
-            });
-            await clientWebSocket.Start();
-            if (clientWebSocket.IsStarted)
-                OnOpen();
-#elif UNITY_2020_3_OR_NEWER
+            
             //尝试释放已连接的ws
             if (ws != null && ws.State != WebSocketState.Closed)
             {
@@ -129,19 +91,13 @@ namespace OpenBLive.Runtime
             ws.OnError += msg => { Logger.LogError("WebSocket Error Message: " + msg); };
             ws.OnClose += code => { Logger.Log("WebSocket Close: " + code); };
             await ws.Connect(timeSpan, count);
-#endif
         }
 
 
         public override void Disconnect()
         {
-#if NET5_0_OR_GREATER
-            clientWebSocket?.Stop(WebSocketCloseStatus.Empty, string.Empty);
-            clientWebSocket?.Dispose();
-#elif UNITY_2020_3_OR_NEWER
             ws?.Close();
             ws = null;
-#endif
         }
 
         public override void Dispose()
@@ -152,14 +108,10 @@ namespace OpenBLive.Runtime
 
         public override void Send(byte[] packet)
         {
-#if NET5_0_OR_GREATER
-            clientWebSocket?.Send(packet);
-#elif UNITY_2020_3_OR_NEWER
             if (ws.State == WebSocketState.Open)
             {
                 ws.Send(packet);
             }
-#endif
         }
 
 
