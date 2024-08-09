@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using UnityEngine.Serialization;
 
 namespace OpenBLive.Runtime.Data
 {
@@ -9,7 +10,12 @@ namespace OpenBLive.Runtime.Data
     [Serializable]
     public struct EnterRoom
     {
-        public string NickName;
-        public string FaceUrl;
+        public string userName;
+        public string userFace;
+        public string fansMedalName;
+        public int fansMedalLevel;
+        public int guardLevel;
+        public int daysBeforeGuardExpired;
+        public int wealthLevel;
     }
 }

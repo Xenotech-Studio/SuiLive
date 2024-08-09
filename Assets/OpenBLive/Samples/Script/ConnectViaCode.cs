@@ -194,8 +194,34 @@ public partial class ConnectViaCode : MonoBehaviour
         OnEnterRoom?.Invoke(enterRoom);
         StringBuilder sb = new StringBuilder("进入房间!");
         sb.AppendLine();
-        sb.Append("用户：");
-        sb.AppendLine(enterRoom.NickName);
+        sb.Append("用户: ");
+        sb.Append(enterRoom.userName);
+        sb.Append("; ");
+        if (enterRoom.fansMedalName != null)
+        {
+            sb.Append("粉丝勋章: ");
+            sb.Append(enterRoom.fansMedalName);
+            sb.Append(" ");
+            sb.Append(enterRoom.fansMedalLevel);
+            sb.Append("级; ");
+        }
+        else
+        {
+            sb.Append("没有粉丝勋章; ");
+        }
+        if (enterRoom.guardLevel > 0)
+        {
+            sb.Append("大航海: ");
+            sb.Append(enterRoom.guardLevel==3?"舰长, ":enterRoom.guardLevel==2?"提督, ":"总督, ");
+            sb.Append("剩余天数: ");
+            sb.Append(enterRoom.daysBeforeGuardExpired);
+        }
+        else
+        {
+            sb.Append("没有大航海; ");
+        }
+        sb.Append("财富等级: ");
+        sb.Append(enterRoom.wealthLevel);
         Debug.Log(sb);
     }
 

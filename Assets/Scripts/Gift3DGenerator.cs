@@ -37,7 +37,7 @@ public class Gift3DGenerator : MonoBehaviour
         else _giftNums[gift.giftId] = gift.giftNum;
         
         // if some coroutine is not running to generate the gift, run it.
-        if (! _giftCoroutines.ContainsKey(gift.giftId)) StartCoroutine(ReceiveGiftCoroutine(gift.giftId));
+        if (! _giftCoroutines.ContainsKey(gift.giftId) && gameObject.activeSelf) StartCoroutine(ReceiveGiftCoroutine(gift.giftId));
     }
 
     public IEnumerator ReceiveGiftCoroutine(long giftId)
