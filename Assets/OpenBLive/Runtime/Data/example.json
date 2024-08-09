@@ -1,0 +1,97 @@
+{
+  "cmd": "INTERACT_WORD",
+  "data": {
+    "contribution": {
+      "grade": 0
+    },
+    "contribution_v2": {
+      "grade": 0,
+      "rank_type": "",
+      "text": ""
+    },
+    "core_user_type": 0,
+    "dmscore": 54,
+    "fans_medal": {
+      "anchor_roomid": 1768085830,
+      "guard_level": 2,
+      "icon_id": 0,
+      "is_lighted": 1,
+      "medal_color": 398668,
+      "medal_color_border": 16771156,
+      "medal_color_end": 6850801,
+      "medal_color_start": 398668,
+      "medal_level": 25,
+      "medal_name": "钛岁爷",
+      "score": 50023459,
+      "special": "",
+      "target_id": 3546698605398604
+    },
+    "group_medal": null,
+    "identities": [
+      7,
+      3,
+      1
+    ],
+    "is_mystery": false,
+    "is_spread": 0,
+    "msg_type": 1,
+    "privilege_type": 2,
+    "roomid": 1768085830,
+    "score": 1773237025043,
+    "spread_desc": "",
+    "spread_info": "",
+    "tail_icon": 0,
+    "tail_text": "",
+    "timestamp": 1723203566,
+    "trigger_time": 1723203564870027800,
+    "uid": 390764956,
+    "uinfo": {
+      "base": {
+        "face": "https://i1.hdslb.com/bfs/face/b63784d235b7e9a94447d6b2664f0d0805bddda6.jpg",
+        "is_mystery": false,
+        "name": "岁宝被抱脸虫",
+        "name_color": 0,
+        "name_color_str": "#E17AFF",
+        "official_info": null,
+        "origin_info": null,
+        "risk_ctrl_info": null
+      },
+      "guard": {
+        "expired_str": "2024-09-02 23:59:59",
+        "level": 2
+      },
+      "guard_leader": null,
+      "medal": {
+        "color": 398668,
+        "color_border": 16771156,
+        "color_end": 6850801,
+        "color_start": 398668,
+        "guard_icon": "https://i0.hdslb.com/bfs/live/98a201c14a64e860a758f089144dcf3f42e7038c.png",
+        "guard_level": 2,
+        "honor_icon": "",
+        "id": 2591375,
+        "is_light": 1,
+        "level": 25,
+        "name": "钛岁爷",
+        "ruid": 3546698605398604,
+        "score": 50023459,
+        "typ": 0,
+        "user_receive_count": 0,
+        "v2_medal_color_border": "#58A1F8FF",
+        "v2_medal_color_end": "#4775EFCC",
+        "v2_medal_color_level": "#000B7099",
+        "v2_medal_color_start": "#4775EFCC",
+        "v2_medal_color_text": "#FFFFFFFF"
+      },
+      "title": null,
+      "uhead_frame": null,
+      "uid": 390764956,
+      "wealth": {
+        "dm_icon_key": "",
+        "level": 28
+      }
+    },
+    "uname": "岁宝被抱脸虫",
+    "uname_color": ""
+  }
+}

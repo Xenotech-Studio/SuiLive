@@ -26,6 +26,10 @@ namespace OpenBLive.Runtime
     public delegate void ReceiveLikeEvent(Like like);
 
     public delegate void ReceiveRawNotice(string raw, JObject jObject);
+    
+    public delegate void EnterRoomEvent(EnterRoom e);
+
+    public delegate void FollowRoomEvent(InteractWord e);
 
     public abstract class BLiveClient : IDisposable
     {
@@ -68,6 +72,16 @@ namespace OpenBLive.Runtime
         /// 更新人气
         /// </summary>
         public event EventHandler<int> UpdatePopularity;
+        
+        /// <summary>
+        /// 进房
+        /// </summary>
+        public event EnterRoomEvent OnEnterRoom;
+        
+        /// <summary>
+        /// 关注直播间
+        /// </summary>
+        public event FollowRoomEvent OnFollowRoom;
 
         public event EventHandler Open;
         public abstract void Connect();
@@ -109,7 +123,7 @@ namespace OpenBLive.Runtime
                     //ProcessPacketAsync(packet1);
                     return;
                 case ProtocolVersion.Brotli:
-                    Debug.Log("WebRoom: Brotli Message " + header.Operation);
+                    //Debug.Log("WebRoom: Brotli Message " + header.Operation);
                     await foreach (var packet1 in BrotliDecompressAsync(packet.PacketBody))
                     {
                         ProcessPacketAsync(new Packet(packet1));
@@ -150,46 +164,64 @@ namespace OpenBLive.Runtime
             
             ReceiveNotice?.Invoke(rawMessage, json);
             var data = json["data"]?.ToString();
-            Debug.Log("WebRoom: ProcessNotice " + json);
-            try
+            string cmd = json["cmd"]?.ToString();
+            if (cmd.Contains("LIVE_OPEN"))
             {
-                Debug.Log("**********" + json["cmd"]?.ToString());
-                switch (json["cmd"]?.ToString())
+                try
                 {
-                    case "LIVE_OPEN_PLATFORM_DM":
-                        var dm = JsonConvert.DeserializeObject<Dm>(data);
-                        OnDanmaku?.Invoke(dm);
-                        break;
-                    case "LIVE_OPEN_PLATFORM_SUPER_CHAT":
-                        var superChat = JsonConvert.DeserializeObject<SuperChat>(data);
-                        OnSuperChat?.Invoke(superChat);
-                        break;
-                    case "LIVE_OPEN_PLATFORM_SUPER_CHAT_DEL":
-                        var superChatDel = JsonConvert.DeserializeObject<SuperChatDel>(data);
-                        OnSuperChatDel?.Invoke(superChatDel);
-                        break;
-                    case "LIVE_OPEN_PLATFORM_SEND_GIFT":
-                        var gift = JsonConvert.DeserializeObject<SendGift>(data);
-                        OnGift?.Invoke(gift);
-                        break;
-                    case "LIVE_OPEN_PLATFORM_GUARD":
-                        var guard = JsonConvert.DeserializeObject<Guard>(data);
-                        OnGuardBuy?.Invoke(guard);
-                        break;
-                    case "LIVE_OPEN_PLATFORM_LIKE":
-                        var like = JsonConvert.DeserializeObject<Like>(data);
-                        OnLike?.Invoke(like);
-                        break;
-                    
-                    
-                    case "DANMU_MSG":
-                        Debug.Log("WebRoom: 弹幕 " + data);
-                        break;
+                    //Debug.Log("**********" + json["cmd"]?.ToString());
+                    switch (json["cmd"]?.ToString())
+                    {
+                        case "LIVE_OPEN_PLATFORM_DM":
+                            var dm = JsonConvert.DeserializeObject<Dm>(data);
+                            OnDanmaku?.Invoke(dm);
+                            break;
+                        case "LIVE_OPEN_PLATFORM_SUPER_CHAT":
+                            var superChat = JsonConvert.DeserializeObject<SuperChat>(data);
+                            OnSuperChat?.Invoke(superChat);
+                            break;
+                        case "LIVE_OPEN_PLATFORM_SUPER_CHAT_DEL":
+                            var superChatDel = JsonConvert.DeserializeObject<SuperChatDel>(data);
+                            OnSuperChatDel?.Invoke(superChatDel);
+                            break;
+                        case "LIVE_OPEN_PLATFORM_SEND_GIFT":
+                            var gift = JsonConvert.DeserializeObject<SendGift>(data);
+                            OnGift?.Invoke(gift);
+                            break;
+                        case "LIVE_OPEN_PLATFORM_GUARD":
+                            var guard = JsonConvert.DeserializeObject<Guard>(data);
+                            OnGuardBuy?.Invoke(guard);
+                            break;
+                        case "LIVE_OPEN_PLATFORM_LIKE":
+                            var like = JsonConvert.DeserializeObject<Like>(data);
+                            OnLike?.Invoke(like);
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Utilities.Logger.LogError("json数据解析异常 rawMessage: " + rawMessage + e.Message);
                 }
             }
-            catch (Exception e)
+            else
             {
-                Utilities.Logger.LogError("json数据解析异常 rawMessage: " + rawMessage + e.Message);
+                Debug.Log("WebRoom: " + json["cmd"]?.ToString() + ": " + json);
+                try
+                {
+                    switch (cmd)
+                    {
+                        case "INTERACT_WORD":
+                            var interactWord = JsonConvert.DeserializeObject<InteractWord>(data);
+                            //Debug.Log("IS ENTER ROOM: "+interactWord.IsEnterRoom + interactWord.msg_type);
+                            if (interactWord.IsEnterRoom) OnEnterRoom?.Invoke(interactWord.ToEnterRoom());
+                            else OnFollowRoom?.Invoke(interactWord);
+                            break;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Utilities.Logger.LogError("json数据解析异常 rawMessage: " + rawMessage + e.Message);
+                }
             }
         }
         

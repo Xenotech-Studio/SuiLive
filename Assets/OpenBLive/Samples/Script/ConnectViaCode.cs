@@ -41,6 +41,7 @@ public partial class ConnectViaCode : MonoBehaviour
 
     public UnityEvent<Dm> OnDanmaku;
     public UnityEvent<SendGift> OnGift;
+    public UnityEvent<EnterRoom> OnEnterRoom;
 
     public async void WebRoomLinkStart()
     {
@@ -61,6 +62,7 @@ public partial class ConnectViaCode : MonoBehaviour
         }
         
         m_WebSocketBLiveWebRoomClient = new WebSocketBLiveWebRoomClient(resObj.GetWssLink(), resObj.GetAuthBody(), roomId);
+        m_WebSocketBLiveWebRoomClient.OnEnterRoom += WebSocketBLiveWebRoomClientOnEnterRoom;
         
         try
         {
@@ -184,6 +186,16 @@ public partial class ConnectViaCode : MonoBehaviour
         sb.AppendLine(dm.userName);
         sb.Append("弹幕内容：");
         sb.Append(dm.msg);
+        Debug.Log(sb);
+    }
+    
+    private void WebSocketBLiveWebRoomClientOnEnterRoom(EnterRoom enterRoom)
+    {
+        OnEnterRoom?.Invoke(enterRoom);
+        StringBuilder sb = new StringBuilder("进入房间!");
+        sb.AppendLine();
+        sb.Append("用户：");
+        sb.AppendLine(enterRoom.NickName);
         Debug.Log(sb);
     }
 

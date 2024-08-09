@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using EditorUtils;
+using OpenBLive.Runtime;
 using OpenBLive.Runtime.Data;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
@@ -26,6 +27,8 @@ public class Gift3DGenerator : MonoBehaviour
     void Start()
     {
     }
+
+    public void EnterRoomDrop(EnterRoom enterRoom) => ReceiveGift(new SendGift { giftId = 31036, giftNum = 1 });
 
     public void ReceiveGift(SendGift gift)
     {
