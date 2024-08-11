@@ -5,6 +5,7 @@ using OpenBLive.Runtime;
 using OpenBLive.Runtime.Data;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.UI;
 
 [ExecuteInEditMode]
 public class Gift3DGenerator : MonoBehaviour
@@ -23,12 +24,17 @@ public class Gift3DGenerator : MonoBehaviour
     private Dictionary<long, long> _giftNums = new Dictionary<long, long>();
     public float GiftMinTimeGap = 0.1f;
     
+    public float GiftExistanceTime = 10;
+    
     // Start is called before the first frame update
     void Start()
     {
     }
 
-    public void EnterRoomDrop(EnterRoom enterRoom) => ReceiveGift(new SendGift { giftId = 31036, giftNum = 1 });
+    public void EnterRoomDrop(EnterRoom enterRoom) => ReceiveGift(new SendGift { 
+        giftId = enterRoom.guardLevel==0?10004: enterRoom.guardLevel==3?10003: enterRoom.guardLevel==2?10002: enterRoom.guardLevel==1?10001: 10000,
+        giftNum = 1, extraImageUrl = enterRoom.userFace, userName = enterRoom.userName
+    });
 
     public void ReceiveGift(SendGift gift)
     {
@@ -37,10 +43,10 @@ public class Gift3DGenerator : MonoBehaviour
         else _giftNums[gift.giftId] = gift.giftNum;
         
         // if some coroutine is not running to generate the gift, run it.
-        if (! _giftCoroutines.ContainsKey(gift.giftId) && gameObject.activeSelf) StartCoroutine(ReceiveGiftCoroutine(gift.giftId));
+        if (! _giftCoroutines.ContainsKey(gift.giftId) && gameObject.activeSelf) StartCoroutine(ReceiveGiftCoroutine(gift.giftId, gift.userName, gift.extraImageUrl));
     }
 
-    public IEnumerator ReceiveGiftCoroutine(long giftId)
+    public IEnumerator ReceiveGiftCoroutine(long giftId, string senderName, string extraImageUrl="")
     {
         if (Gift3DPrefabs.ContainsKey(giftId))
         {
@@ -48,17 +54,75 @@ public class Gift3DGenerator : MonoBehaviour
             {
                 _giftNums[giftId] -= 1;
                 
-                GameObject gift3D = Instantiate(Gift3DPrefabs[giftId], this.transform);
-                gift3D.transform.position = new Vector3(
-                    x: GiftSource.transform.position.x + (PossibilityCurve.Evaluate(Random.Range(0f, 1f)) - 0.5f) * GiftStartPositionXRange * 100 ,
-                    y: GiftSource.transform.position.y,
-                    z: GiftSource.transform.position.z + (PossibilityCurve.Evaluate(Random.Range(0f, 1f)) - 0.5f) * 20);
+                StartCoroutine(GenerateSingleGift(giftId, senderName, extraImageUrl));
                 
                 yield return new WaitForSeconds(GiftMinTimeGap);
             }
         }
         
         _giftCoroutines.Remove(giftId);
+    }
+
+    public IEnumerator GenerateSingleGift(long giftId, string senderName, string extraImageUrl="")
+    {
+        GameObject gift3D = Instantiate(Gift3DPrefabs[giftId], this.transform);
+        gift3D.transform.position = new Vector3(
+            x: GiftSource.transform.position.x + (PossibilityCurve.Evaluate(Random.Range(0f, 1f)) - 0.5f) * GiftStartPositionXRange * 100 ,
+            y: GiftSource.transform.position.y,
+            z: GiftSource.transform.position.z + (PossibilityCurve.Evaluate(Random.Range(0f, 1f)) - 0.5f) * 20);
+
+        gift3D.name += " - " + senderName;
+        
+        StartCoroutine(DestorySingleGiftAfterSeconds(gift3D, GiftExistanceTime));
+        
+        // if has extraImageUrl, and if there is a gameObject with tag "AvatarImage" and has an Image component,
+        // then set the Image component's sprite to the extraImageUrl.
+        if (!string.IsNullOrEmpty(extraImageUrl))
+        {
+            //GameObject avatarImage = gift3D.FindChildWithTag("AvatarImage");
+            GameObject avatarImage = null;
+            foreach (Image i in gift3D.GetComponentsInChildren<Image>())
+            {
+                if (i.CompareTag("WebImage"))
+                {
+                    avatarImage = i.gameObject;
+                    break;
+                }
+            }
+            
+            if (avatarImage != null)
+            {
+                UnityEngine.UI.Image image = avatarImage.GetComponent<UnityEngine.UI.Image>();
+                if (image != null)
+                {
+                    bool isDone = false;
+                    float startTime = Time.time;
+                    gift3D.gameObject.SetActive(false);
+                    avatarImage.name = extraImageUrl;
+                    WebImageUtil.GetTexture2DByUrl(extraImageUrl, (tex) =>
+                    {
+                        if (tex != null)
+                        {
+                            Debug.Log("sprite got");
+                            image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+                        }
+                        else
+                        {
+                            Debug.Log("sprite got null");
+                        }
+                        isDone = true;
+                        gift3D.gameObject.SetActive(true);
+                    });
+                    yield return new WaitUntil(() => isDone||Time.time-startTime>100);
+                }
+            }
+        }
+    }
+    
+    public IEnumerator DestorySingleGiftAfterSeconds(GameObject gift3D, float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        Destroy(gift3D);
     }
 
     // Update is called once per frame

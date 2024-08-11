@@ -89,5 +89,8 @@ namespace OpenBLive.Runtime.Data
         /// 主播信息
         /// </summary>
         [JsonProperty("anchor_info")] public AnchorInfo anchorInfo;
+
+
+        [JsonIgnore] public string extraImageUrl;
     }
 }
