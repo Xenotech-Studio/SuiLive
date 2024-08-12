@@ -17,7 +17,7 @@ namespace DataSystem
         [JsonIgnore]
         public override string LocalJsonPath { get=>LocalJsonPathValue; }
         
-        public List<LevelDesignData> Levels = new List<LevelDesignData>();
+        
         
     }
 };

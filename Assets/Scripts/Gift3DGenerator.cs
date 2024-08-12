@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using EditorUtils;
 using OpenBLive.Runtime;
 using OpenBLive.Runtime.Data;
+using SuiLive;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
@@ -38,6 +39,12 @@ public class Gift3DGenerator : MonoBehaviour
 
     public void ReceiveGift(SendGift gift)
     {
+        if (gift.giftId==10001 && !ConfigManager.Config.EnterRoomDrop.DropGuard1) return;
+        if (gift.giftId==10002 && !ConfigManager.Config.EnterRoomDrop.DropGuard2) return;
+        if (gift.giftId==10003 && !ConfigManager.Config.EnterRoomDrop.DropGuard3) return;
+        if (gift.giftId==10004 && !ConfigManager.Config.EnterRoomDrop.DropNormalUser) return;
+        if (gift.giftId <= 10000 || gift.giftId > 10004) return;
+        
         // try to add gift.giftNum to _giftNums[gift.giftId]
         if (_giftNums.ContainsKey(gift.giftId)) _giftNums[gift.giftId] += gift.giftNum;
         else _giftNums[gift.giftId] = gift.giftNum;
