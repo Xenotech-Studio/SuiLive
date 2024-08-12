@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using DataSystem;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SuiLive
 {
@@ -45,6 +40,8 @@ namespace SuiLive
             DropGuard2Value = SavedConfig.EnterRoomDrop.DropGuard2;
             DropGuard3Value = SavedConfig.EnterRoomDrop.DropGuard3;
             DropNormalUserValue = SavedConfig.EnterRoomDrop.DropNormalUser;
+            
+            TopicToolEnabledValue = SavedConfig.TopicHelper.Enabled;
         }
 
         public void SaveConfig()
@@ -53,6 +50,13 @@ namespace SuiLive
             SavedConfig.EnterRoomDrop.DropGuard2 = DropGuard2Value;
             SavedConfig.EnterRoomDrop.DropGuard3 = DropGuard3Value;
             SavedConfig.EnterRoomDrop.DropNormalUser = DropNormalUserValue;
+            
+            SavedConfig.TopicHelper.Enabled = TopicToolEnabledValue;
+        }
+
+        private void OnDisable()
+        {
+            GameProgressData.Save();
         }
     }
 }
