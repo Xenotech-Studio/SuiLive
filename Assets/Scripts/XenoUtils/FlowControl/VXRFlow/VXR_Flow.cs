@@ -55,6 +55,15 @@ namespace Versee.UI
             
             _current = target;
             theOne.SetActive(true);
+            #if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                foreach (ExecuteOnEnable e in theOne.GetComponentsInChildren<ExecuteOnEnable>())
+                {
+                    e.OnEnable();
+                }
+            }
+            #endif
         }
 
         public void GoToID(string ID)
@@ -74,7 +83,19 @@ namespace Versee.UI
                 }
             }
             if(theOne==null) Debug.Log("Requested ID not found.");
-            else{ theOne.SetActive(true); }
+            else
+            {
+                theOne.SetActive(true);
+                #if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    foreach (ExecuteOnEnable e in theOne.GetComponents<ExecuteOnEnable>())
+                    {
+                        e.OnEnable();
+                    }
+                }
+                #endif
+            }
         }
 
         public int GetIndex()

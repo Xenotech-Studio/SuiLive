@@ -11,7 +11,7 @@ public class ExecuteOnEnable : MonoBehaviour
     public float Delay = 0;
 
     // Start is called before the first frame update
-    private void OnEnable()
+    public void OnEnable()
     {
         if (Delay==0) ExeOnEnable?.Invoke();
         else StartCoroutine(Execute());

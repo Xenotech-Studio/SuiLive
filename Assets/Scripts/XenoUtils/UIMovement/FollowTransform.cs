@@ -144,8 +144,12 @@ public class FollowTransform : MonoBehaviour
             transform.position = position;
             transform.rotation = Quaternion.Euler(rotation);
         }
-        
-        
+    }
+
+    public void SwitchFollowedTransform(Transform newTransform)
+    {
+        FollowedTransform = newTransform;
+        Update();
     }
 }
 
