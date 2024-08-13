@@ -1,5 +1,6 @@
 using DataSystem;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SuiLive
 {
@@ -46,6 +47,8 @@ namespace SuiLive
             DropCountGuard1Value = SavedConfig.EnterRoomDrop.DropCountGuard1;
             
             TopicToolEnabledValue = SavedConfig.TopicHelper.Enabled;
+            
+            LockWindowSizeValue = SavedConfig.WindowSize.Locked;
         }
 
         public void SaveConfig()
@@ -60,11 +63,28 @@ namespace SuiLive
             SavedConfig.EnterRoomDrop.DropCountGuard1 = DropCountGuard1Value;
             
             SavedConfig.TopicHelper.Enabled = TopicToolEnabledValue;
+            
+            SavedConfig.WindowSize.Locked = LockWindowSizeValue;
         }
 
         private void OnDisable()
         {
             GameProgressData.Save();
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        public Toggle LockWindowSizeToggle;
+        
+        public bool LockWindowSizeValue
+        {
+            get => LockWindowSizeToggle.isOn;
+            set => LockWindowSizeToggle.isOn = value;
         }
     }
 }
