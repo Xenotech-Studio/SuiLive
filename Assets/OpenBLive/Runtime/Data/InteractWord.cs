@@ -54,6 +54,9 @@ namespace OpenBLive.Runtime.Data
         
         [JsonProperty("wealth")]
         public UInfoWealth wealth;
+        
+        [JsonProperty("medal")]
+        public UInfoMedal medal;
     }
 
     [Serializable]
@@ -101,5 +104,12 @@ namespace OpenBLive.Runtime.Data
     public class UInfoWealth
     {
         public int level;
+    }
+    
+    [Serializable]
+    public class UInfoMedal
+    {
+        public int level;
+        public string name;
     }
 }

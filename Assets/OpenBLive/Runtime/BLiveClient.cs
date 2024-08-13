@@ -216,6 +216,10 @@ namespace OpenBLive.Runtime
                             if (interactWord.IsEnterRoom) OnEnterRoom?.Invoke(interactWord.ToEnterRoom());
                             else OnFollowRoom?.Invoke(interactWord);
                             break;
+                        case "ENTRY_EFFECT":
+                            var entranceEffect = JsonConvert.DeserializeObject<EntranceEffect>(data);
+                            OnEnterRoom?.Invoke(entranceEffect.ToEnterRoom());
+                            break;
                     }
                 }
                 catch (Exception e)
