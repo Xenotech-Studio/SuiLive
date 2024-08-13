@@ -18,7 +18,15 @@ public class WindowSizeControl : MonoBehaviour
             // user can draw to resize the window
             ConfigManager.SavedConfig.WindowSize.Width = Screen.width;
             ConfigManager.SavedConfig.WindowSize.Height = Screen.height;
-            //Screen.SetResolution(Screen.width, Screen.height, FullScreenMode.Windowed);
+        }
+        
+        if (ConfigManager.Config.WindowSize.StayOnTop)
+        {
+            // let the window stay on top
+        }
+        else
+        {
+            // let the window not stay on top
         }
     }
 }

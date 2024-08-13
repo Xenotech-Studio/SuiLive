@@ -49,6 +49,7 @@ namespace SuiLive
             TopicToolEnabledValue = SavedConfig.TopicHelper.Enabled;
             
             LockWindowSizeValue = SavedConfig.WindowSize.Locked;
+            StayOnTopValue = SavedConfig.WindowSize.StayOnTop;
         }
 
         public void SaveConfig()
@@ -65,6 +66,7 @@ namespace SuiLive
             SavedConfig.TopicHelper.Enabled = TopicToolEnabledValue;
             
             SavedConfig.WindowSize.Locked = LockWindowSizeValue;
+            SavedConfig.WindowSize.StayOnTop = StayOnTopValue;
         }
 
         private void OnDisable()
@@ -85,6 +87,14 @@ namespace SuiLive
         {
             get => LockWindowSizeToggle.isOn;
             set => LockWindowSizeToggle.isOn = value;
+        }
+        
+        public Toggle StayOnTopToggle;
+        
+        public bool StayOnTopValue
+        {
+            get => StayOnTopToggle.isOn;
+            set => StayOnTopToggle.isOn = value;
         }
     }
 }
