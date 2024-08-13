@@ -14,6 +14,9 @@ public class FaceCamera : MonoBehaviour
     public void FixedUpdate()
     {
         transform.forward = forward;
+        
+        // but local z rotation keep zero
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, 0);
     }
 }
 

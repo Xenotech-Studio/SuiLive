@@ -34,7 +34,8 @@ public class Gift3DGenerator : MonoBehaviour
 
     public void EnterRoomDrop(EnterRoom enterRoom) => ReceiveGift(new SendGift { 
         giftId = enterRoom.guardLevel==0?10004: enterRoom.guardLevel==3?10003: enterRoom.guardLevel==2?10002: enterRoom.guardLevel==1?10001: 10000,
-        giftNum = 1, extraImageUrl = enterRoom.userFace, userName = enterRoom.userName
+        giftNum =  enterRoom.guardLevel==0?ConfigManager.Config.EnterRoomDrop.DropCountNormalUser: enterRoom.guardLevel==3?ConfigManager.Config.EnterRoomDrop.DropCountGuard3: enterRoom.guardLevel==2?ConfigManager.Config.EnterRoomDrop.DropCountGuard2: enterRoom.guardLevel==1?ConfigManager.Config.EnterRoomDrop.DropCountGuard1: 0,
+        extraImageUrl = enterRoom.userFace, userName = enterRoom.userName
     });
 
     public void ReceiveGift(SendGift gift)

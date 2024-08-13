@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,6 +36,38 @@ namespace SuiLive
         {
             get => DropNormalUserToggle.isOn;
             set => DropNormalUserToggle.isOn = value;
+        }
+        
+        public TMP_InputField DroupCountNormalUserInput;
+        
+        public int DropCountNormalUserValue
+        {
+            get => int.Parse(DroupCountNormalUserInput.text);
+            set => DroupCountNormalUserInput.text = value.ToString();
+        }
+        
+        public TMP_InputField DroupCountGuard3Input;
+        
+        public int DropCountGuard3Value
+        {
+            get => int.Parse(DroupCountGuard3Input.text);
+            set => DroupCountGuard3Input.text = value.ToString();
+        }
+        
+        public TMP_InputField DroupCountGuard2Input;
+        
+        public int DropCountGuard2Value
+        {
+            get => int.Parse(DroupCountGuard2Input.text);
+            set => DroupCountGuard2Input.text = value.ToString();
+        }
+        
+        public TMP_InputField DroupCountGuard1Input;
+        
+        public int DropCountGuard1Value
+        {
+            get => int.Parse(DroupCountGuard1Input.text);
+            set => DroupCountGuard1Input.text = value.ToString();
         }
 
     }
