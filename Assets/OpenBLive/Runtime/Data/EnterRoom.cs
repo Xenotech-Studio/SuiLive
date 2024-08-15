@@ -10,6 +10,7 @@ namespace OpenBLive.Runtime.Data
     [Serializable]
     public struct EnterRoom
     {
+        public long uid;
         public string userName;
         public string userFace;
         public string fansMedalName;

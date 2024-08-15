@@ -17,7 +17,5 @@ namespace DataSystem
         [JsonIgnore]
         public override string LocalJsonPath { get=>LocalJsonPathValue; }
         
-        
-        
     }
 };

@@ -42,12 +42,13 @@ public partial class ConnectViaCode : MonoBehaviour
     public UnityEvent<Dm> OnDanmaku;
     public UnityEvent<SendGift> OnGift;
     public UnityEvent<EnterRoom> OnEnterRoom;
+    
+    public int RoomId = 24910329;
 
     public async void WebRoomLinkStart()
     {
-        int roomId = 24910329;
         
-        var ret = await BApi.GetWebRoomInfo( roomId: roomId );
+        var ret = await BApi.GetWebRoomInfo( roomId: RoomId );
         Debug.Log("WebRoom: 获取房间信息: " + ret);
         var resObj = JsonConvert.DeserializeObject<WebRoomStartInfo>(ret);
         if (resObj.Code != 0)
@@ -60,8 +61,8 @@ public partial class ConnectViaCode : MonoBehaviour
         {
             Debug.Log("WebRoom: 获取房间信息成功: " + "\ntoken: " + resObj.GetAuthBody());
         }
-        
-        m_WebSocketBLiveWebRoomClient = new WebSocketBLiveWebRoomClient(resObj.GetWssLink(), resObj.GetAuthBody(), roomId);
+
+        m_WebSocketBLiveWebRoomClient = new WebSocketBLiveWebRoomClient(resObj.GetWssLink(), resObj.GetAuthBody(), RoomId);
         m_WebSocketBLiveWebRoomClient.OnEnterRoom += WebSocketBLiveWebRoomClientOnEnterRoom;
         
         try

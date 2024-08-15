@@ -17,11 +17,15 @@ namespace OpenBLive.Runtime.Data
         [JsonProperty("uinfo")]
         public UInfo uinfo;
         
+        [JsonProperty("roomid")]
+        public int roomId;
+        
         public EnterRoom ToEnterRoom()
         {
             // Debug.Log("fansMedal is null?: " + (fansMedal == null) + " " + fansMedal?.medal_name);
             return new EnterRoom
             {
+                uid = uinfo.uid,
                 userName = uinfo.baseInfo.name,
                 userFace = uinfo.baseInfo.face,
                 fansMedalName = uinfo.medal?.name,

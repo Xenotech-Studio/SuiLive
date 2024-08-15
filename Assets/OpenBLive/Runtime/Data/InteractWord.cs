@@ -32,6 +32,7 @@ namespace OpenBLive.Runtime.Data
             Debug.Log("fansMedal is null?: " + (fansMedal == null) + " " + fansMedal?.medal_name);
             return new EnterRoom
             {
+                uid = uinfo.uid,
                 userName = uinfo.baseInfo.name,
                 userFace = uinfo.baseInfo.face,
                 fansMedalName = fansMedal?.medal_name,
@@ -57,6 +58,9 @@ namespace OpenBLive.Runtime.Data
         
         [JsonProperty("medal")]
         public UInfoMedal medal;
+        
+        [JsonProperty("uid")]
+        public long uid;
     }
 
     [Serializable]

@@ -14,6 +14,7 @@ namespace OpenBLive._Demo.LoginSample.Scripts
         public string AccessKeyId = "";
         public string AccessKeySecret = "";
         public string AppId = "";
+        public int RoomId = 0;
     }
     
     // custom property drawer
@@ -31,6 +32,7 @@ namespace OpenBLive._Demo.LoginSample.Scripts
             var accessKeyId = property.FindPropertyRelative("AccessKeyId");
             var accessKeySecret = property.FindPropertyRelative("AccessKeySecret");
             var gameId = property.FindPropertyRelative("AppId");
+            var roomId = property.FindPropertyRelative("RoomId");
             var height = EditorGUIUtility.singleLineHeight;
             var rect = new Rect(position.x, position.y, position.width, height);
             EditorGUI.PropertyField(rect, idCode);
@@ -40,13 +42,15 @@ namespace OpenBLive._Demo.LoginSample.Scripts
             EditorGUI.PropertyField(rect, accessKeySecret);
             rect.y += height;
             EditorGUI.PropertyField(rect, gameId);
+            rect.y += height;
+            EditorGUI.PropertyField(rect, roomId);
             EditorGUI.indentLevel = indent;
             EditorGUI.EndProperty();
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorGUIUtility.singleLineHeight * 4 + 5;
+            return EditorGUIUtility.singleLineHeight * 5 + 5;
         }
     }
     #endif

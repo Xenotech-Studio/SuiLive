@@ -40,7 +40,7 @@ namespace OpenBLive.Runtime
         {
             Debug.Log("WebRoom: OnOpen\n"+roomId+"\n"+token);
 
-            SendAsync(Packet.PredefinedWebRoomAuthority(1768085830));
+            SendAsync(Packet.PredefinedWebRoomAuthority(roomId));
             //SendAsync(Packet.WebRoomAuthority(uid: 3546730259810411, roomid: roomId, token: token));
 
             m_Timer?.Dispose();
