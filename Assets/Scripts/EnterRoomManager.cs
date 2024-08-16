@@ -7,7 +7,7 @@ namespace DefaultNamespace
     public class EnterRoomManager
     {
         public static Dictionary<long, float> LastEnterRoomTimestamp = new Dictionary<long, float>();
-        
+        public static Dictionary<long, float> LastEnterRoomTimestamp2 = new Dictionary<long, float>();
         public static bool CheckCoolDown(long uid, float coolDownTimeInSeconds=60)
         {
             if (!LastEnterRoomTimestamp.ContainsKey(uid))
@@ -20,6 +20,27 @@ namespace DefaultNamespace
                 if (Time.time - LastEnterRoomTimestamp[uid] > coolDownTimeInSeconds)
                 {
                     LastEnterRoomTimestamp[uid] = Time.time;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        
+        public static bool CheckCoolDown2(long uid, float coolDownTimeInSeconds=60)
+        {
+            if (!LastEnterRoomTimestamp2.ContainsKey(uid))
+            {
+                LastEnterRoomTimestamp2[uid] = Time.time;
+                return true;
+            }
+            else
+            {
+                if (Time.time - LastEnterRoomTimestamp2[uid] > coolDownTimeInSeconds)
+                {
+                    LastEnterRoomTimestamp2[uid] = Time.time;
                     return true;
                 }
                 else
