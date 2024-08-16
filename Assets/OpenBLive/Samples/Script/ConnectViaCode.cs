@@ -71,6 +71,7 @@ public partial class ConnectViaCode : MonoBehaviour
             //ConnectSuccess?.Invoke();
             Debug.Log("WebRoom: 连接成功");
             OnConnectSuccess?.Invoke();
+            ConnectSuccess?.Invoke();
         }
         catch (Exception ex)
         {

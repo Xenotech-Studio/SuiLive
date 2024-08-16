@@ -26,6 +26,11 @@ public class SuiLiveLoginManager : MonoBehaviour
     [HideInInspector] [SerializeField]
     public SerializableDictionary<string, IdentityData> IdentityDataDic = new SerializableDictionary<string, IdentityData>();
 
+    [FormerlySerializedAs("IsConnectToPlay")] [Header("是否连接玩法")]
+    public bool IsDontConnectToPlay;
+    [FormerlySerializedAs("ConnectToPlayToggle")] public Toggle DontConnectToPlayToggle;
+    [FormerlySerializedAs("ConnectToPlaySaveKey")] public string DontConnectToPlaySaveKey = "IsConnectToPlay";
+    
     [Header("开启玩法")]
     public Button StartToPlayButton;
 
@@ -42,7 +47,9 @@ public class SuiLiveLoginManager : MonoBehaviour
     {
         //config read and init
         IsSaveIdCode = BilibiliPlayerPrefs.GetBool(IsSaveCodeSaveKey);
+        IsDontConnectToPlay = BilibiliPlayerPrefs.GetBool(DontConnectToPlaySaveKey);
         SaveIdCodeToggle.isOn = IsSaveIdCode;
+        DontConnectToPlayToggle.isOn = IsDontConnectToPlay;
         if (SaveIdCodeToggle)
         {
             SelectedIdentity = BilibiliPlayerPrefs.GetString(SelectedIdentityKey);
@@ -59,6 +66,7 @@ public class SuiLiveLoginManager : MonoBehaviour
         IdentityDropdown.onValueChanged.AddListener(ChangeSelection);
         SaveIdCodeToggle.onValueChanged.AddListener(ChangeIsSaveIdCode);
         StartToPlayButton.onClick.AddListener(StartToPlay);
+        DontConnectToPlayToggle.onValueChanged.AddListener(ChangeIsDontConnectToPlay);
         
         //init aniamtion hash
         hideHash = Animator.StringToHash("Hide");
@@ -96,6 +104,12 @@ public class SuiLiveLoginManager : MonoBehaviour
             BilibiliPlayerPrefs.SetString(SelectedIdentityKey, string.Empty);
         }
     }
+    
+    public virtual void ChangeIsDontConnectToPlay(bool isOn)
+    {
+        IsDontConnectToPlay = isOn;
+        BilibiliPlayerPrefs.SetBool(DontConnectToPlaySaveKey, IsDontConnectToPlay);
+    }
 
     /// <summary>
     /// 点击开启玩法时触发
@@ -108,8 +122,12 @@ public class SuiLiveLoginManager : MonoBehaviour
             ConnectViaCode.Instance.accessKeyId = IdentityDataDic[SelectedIdentity].AccessKeyId;
             ConnectViaCode.Instance.accessKeySecret = IdentityDataDic[SelectedIdentity].AccessKeySecret;
             ConnectViaCode.Instance.RoomId = IdentityDataDic[SelectedIdentity].RoomId;
-            ConnectViaCode.Instance.LinkStart(IdentityDataDic[SelectedIdentity].IdCode);
-            
+
+            if (!IsDontConnectToPlay)
+            {
+                ConnectViaCode.Instance.LinkStart(IdentityDataDic[SelectedIdentity].IdCode);
+            }
+
             ConnectViaCode.Instance.WebRoomLinkStart();
         }
     }

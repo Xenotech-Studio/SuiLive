@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DataSystem;
+using DefaultNamespace;
 using EditorUtils;
 using OpenBLive.Runtime;
 using OpenBLive.Runtime.Data;
@@ -35,7 +36,7 @@ public class Gift3DGenerator : MonoBehaviour
 
     public void EnterRoomDrop(EnterRoom enterRoom)
     {
-        if (CheckCoolDown(enterRoom.uid, ConfigManager.Config.EnterRoomDrop.DropCoolDown * 60f))
+        if (EnterRoomManager.CheckCoolDown(enterRoom.uid, ConfigManager.Config.EnterRoomDrop.DropCoolDown * 60f))
         {
             bool drop = enterRoom.guardLevel == 0 ? ConfigManager.Config.EnterRoomDrop.DropNormalUser :
                 enterRoom.guardLevel == 3 ? ConfigManager.Config.EnterRoomDrop.DropGuard3 :
@@ -49,7 +50,7 @@ public class Gift3DGenerator : MonoBehaviour
             
             if (mul>0 && drop)
             {
-                int count = GetContinueAttendance(ConnectViaCode.Instance.RoomId, enterRoom.uid);
+                int count = EnterRoomManager.GetContinueAttendance(ConnectViaCode.Instance.RoomId, enterRoom.uid);
                 Debug.Log($"进场掉落！UID:{enterRoom.uid}, 昵称:{enterRoom.userName}, 连续签到天数:{count}x航海等级乘数{mul}");
                 ReceiveGift(new SendGift
                 {
@@ -64,62 +65,8 @@ public class Gift3DGenerator : MonoBehaviour
         }
     }
 
-    public int GetContinueAttendance(long roomId, long uid)
-    {
-        if (!GameProgressData.GetLatestAttendanceDate(roomId).ContainsKey(uid))
-        {
-            GameProgressData.GetLatestAttendanceDate(roomId)[uid] = System.DateTime.Now.ToString("yyyy-MM-dd");
-            GameProgressData.GetContinueAttendance(roomId)[uid] = 1;
-            GameProgressData.Save();
-            return 1;
-        }
-        else
-        {
-            // if last attendance date is yestorday, then continue attendance + 1
-            // if last attendance date is today, then return the continue attendance.
-            // if last attendance date is before yestorday, then reset the continue attendance to 1.
-            if (GameProgressData.GetLatestAttendanceDate(roomId)[uid] == System.DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"))
-            {
-                GameProgressData.GetLatestAttendanceDate(roomId)[uid] = System.DateTime.Now.ToString("yyyy-MM-dd");
-                GameProgressData.GetContinueAttendance(roomId)[uid] += 1;
-                GameProgressData.Save();
-                return GameProgressData.GetContinueAttendance(roomId)[uid];
-            }
-            else if (GameProgressData.GetLatestAttendanceDate(roomId)[uid] == System.DateTime.Now.ToString("yyyy-MM-dd"))
-            {
-                return GameProgressData.GetContinueAttendance(roomId)[uid];
-            }
-            else
-            {
-                GameProgressData.GetLatestAttendanceDate(roomId)[uid] = System.DateTime.Now.ToString("yyyy-MM-dd");
-                GameProgressData.GetContinueAttendance(roomId)[uid] = 1;
-                GameProgressData.Save();
-                return 1;
-            }
-        }
-    }
     
-    public Dictionary<long, float> LastEnterRoomTimestamp = new Dictionary<long, float>();
-    public bool CheckCoolDown(long uid, float coolDownTimeInSeconds=60)
-    {
-        if (!LastEnterRoomTimestamp.ContainsKey(uid))
-        {
-            LastEnterRoomTimestamp[uid] = Time.time;
-            return true;
-        }
-        else
-        {
-            if (Time.time - LastEnterRoomTimestamp[uid] > coolDownTimeInSeconds)
-            {
-                LastEnterRoomTimestamp[uid] = Time.time;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }
+    
 
     public void ReceiveGift(SendGift gift)
     {
