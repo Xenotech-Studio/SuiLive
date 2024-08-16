@@ -28,9 +28,9 @@ public class OverlayCameraScaleAdjust : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Cam.orthographicSize = Size / Cam.aspect;
+        //Cam.orthographicSize = Size / Cam.aspect;
 
-        float y = - (Width/2) * (1 - 1/Cam.aspect) + BottomOffset;
-        Cam.transform.localPosition = new Vector3(0, y, 0);
+        float x = (Width/2) * (1 - Cam.aspect) + BottomOffset;
+        Cam.transform.localPosition = new Vector3(x, 0, 0);
     }
 }
