@@ -97,10 +97,12 @@ public class InfoHelper : MonoBehaviour
     
     public void EnterRoom(EnterRoom er)
     {
+        if (gameObject.activeInHierarchy == false) return;
+        
         if (EnterRoomManager.CheckCoolDown2(er.uid, ConfigManager.Config.EnterRoomDrop.DropCoolDown))
         {
             int continueAttendance = EnterRoomManager.GetContinueAttendance(ConnectViaCode.Instance.RoomId, er.uid);
-            int weekAttendance = EnterRoomManager.GetContinueAttendance(ConnectViaCode.Instance.RoomId, er.uid);
+            int weekAttendance = EnterRoomManager.GetWeekAttendance(ConnectViaCode.Instance.RoomId, er.uid);
 
             RectTransform enterRoomTemplate = null;
             switch (er.guardLevel)

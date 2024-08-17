@@ -84,5 +84,36 @@ namespace DefaultNamespace
                 }
             }
         }
+
+        public static int GetWeekAttendance(long roomId, long uid)
+        {
+            List<string> history = GameProgressData.GetWeekAttendanceHistory(roomId, uid);
+            
+            bool IsInSameWeek(string date1, string date2)
+            {
+                // if the two dates are in the same week, return true
+                return System.DateTime.Parse(date1).AddDays(-1 * (int)System.DateTime.Parse(date1).DayOfWeek) == System.DateTime.Parse(date2).AddDays(-1 * (int)System.DateTime.Parse(date2).DayOfWeek);
+            }
+
+            // for each date in history, if it is not in the same week, remove it from list
+            for (int i = 0; i < history.Count; i++)
+            {
+                if (!IsInSameWeek(history[i], System.DateTime.Now.ToString("yyyy-MM-dd")))
+                {
+                    history.RemoveAt(i);
+                    i -= 1;
+                }
+            }
+            
+            // add today's date to history, if it is not in the list
+            if (!history.Contains(System.DateTime.Now.ToString("yyyy-MM-dd")))
+            {
+                history.Add(System.DateTime.Now.ToString("yyyy-MM-dd"));
+            }
+            
+            GameProgressData.Save();
+            
+            return history.Count;
+        }
     }
 }

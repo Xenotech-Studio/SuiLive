@@ -50,7 +50,7 @@ public class Gift3DGenerator : MonoBehaviour
             
             if (mul>0 && drop)
             {
-                int count = EnterRoomManager.GetContinueAttendance(ConnectViaCode.Instance.RoomId, enterRoom.uid);
+                int count = EnterRoomManager.GetWeekAttendance(ConnectViaCode.Instance.RoomId, enterRoom.uid);
                 Debug.Log($"进场掉落！UID:{enterRoom.uid}, 昵称:{enterRoom.userName}, 连续签到天数:{count}x航海等级乘数{mul}");
                 ReceiveGift(new SendGift
                 {

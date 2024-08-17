@@ -18,6 +18,7 @@ namespace DataSystem
         
         public Dictionary<long, Dictionary<long, int>> ContinueAttendance = new Dictionary<long, Dictionary<long, int>>();
         public Dictionary<long, Dictionary<long, string>> LatestAttendanceDate = new Dictionary<long, Dictionary<long, string>>();
+        public Dictionary<long, Dictionary<long, List<string>>> WeekAttendanceHistory = new Dictionary<long, Dictionary<long, List<string>>>();
     };
 
     public partial class GameProgressData
@@ -38,6 +39,19 @@ namespace DataSystem
                 Instance.LatestAttendanceDate[roomId] = new Dictionary<long, string>();
             }
             return Instance.LatestAttendanceDate[roomId];
+        }
+        
+        public static List<string> GetWeekAttendanceHistory(long roomId, long uid)
+        {
+            if (!Instance.WeekAttendanceHistory.ContainsKey(roomId))
+            {
+                Instance.WeekAttendanceHistory[roomId] = new Dictionary<long, List<string>>();
+            }
+            if (!Instance.WeekAttendanceHistory[roomId].ContainsKey(uid))
+            {
+                Instance.WeekAttendanceHistory[roomId][uid] = new List<string>();
+            }
+            return Instance.WeekAttendanceHistory[roomId][uid];
         }
     }
 }
