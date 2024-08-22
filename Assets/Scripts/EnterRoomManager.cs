@@ -92,7 +92,11 @@ namespace DefaultNamespace
             bool IsInSameWeek(string date1, string date2)
             {
                 // if the two dates are in the same week, return true
-                return System.DateTime.Parse(date1).AddDays(-1 * (int)System.DateTime.Parse(date1).DayOfWeek) == System.DateTime.Parse(date2).AddDays(-1 * (int)System.DateTime.Parse(date2).DayOfWeek);
+                int date1DayOfWeek = System.DateTime.Parse(date1).DayOfWeek == 0 ? 6 : ((int)System.DateTime.Parse(date1).DayOfWeek - 1);
+                int date2DayOfWeek = System.DateTime.Parse(date2).DayOfWeek == 0 ? 6 : ((int)System.DateTime.Parse(date2).DayOfWeek - 1);
+                string date1Monday = System.DateTime.Parse(date1).AddDays(-1 * date1DayOfWeek).ToString("yyyy-MM-dd");
+                string date2Monday = System.DateTime.Parse(date2).AddDays(-1 * date2DayOfWeek).ToString("yyyy-MM-dd");
+                return date1Monday == date2Monday;
             }
 
             // for each date in history, if it is not in the same week, remove it from list
