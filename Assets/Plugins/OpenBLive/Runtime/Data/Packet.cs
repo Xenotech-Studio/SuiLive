@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 #if UNITY_2021_2_OR_NEWER || NET5_0_OR_GREATER
 using System.Buffers;
@@ -35,8 +36,18 @@ namespace OpenBLive.Runtime.Data
         public Packet(ReadOnlySpan<byte> bytes)
         {
             var headerBuffer = bytes[0..PacketHeader.KPacketHeaderLength];
-            Header = new PacketHeader(headerBuffer);
-            PacketBody = bytes[Header.HeaderLength..Header.PacketLength].ToArray();
+            try{ Header = new PacketHeader(headerBuffer);} catch (Exception e) { throw new Exception("PacketHeader Parse Error", e); }
+
+            try
+            {
+                PacketBody = bytes[Header.HeaderLength..Header.PacketLength].ToArray();
+            }
+            catch (Exception e)
+            {
+                // convert bytes as string
+                //Debug.Log($"PacketBody Parse Error: bytes length: {bytes.Length} packet length: {Header.PacketLength}, header length: {Header.HeaderLength}");
+                throw new Exception("PacketBody Parse Error", e);
+            }
         }
         public Packet(Operation operation, byte[] body = null)
         {

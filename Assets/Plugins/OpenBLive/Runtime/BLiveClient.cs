@@ -123,10 +123,21 @@ namespace OpenBLive.Runtime
                     //ProcessPacketAsync(packet1);
                     return;
                 case ProtocolVersion.Brotli:
-                    //Debug.Log("WebRoom: Brotli Message " + header.Operation);
+                    Debug.Log("WebRoom: Brotli Message " + header.Operation);
+                    int index_in_list = 0;
                     await foreach (var packet1 in BrotliDecompressAsync(packet.PacketBody))
                     {
+                        try
+                        {
+                            packet = new Packet(packet1);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogWarning($"Invalid packet [{index_in_list}]: " + packet1.Length + Encoding.UTF8.GetString(packet1));
+                            return;
+                        }
                         ProcessPacketAsync(new Packet(packet1));
+                        index_in_list++;
                     }
                     return;
                 default:
@@ -160,7 +171,16 @@ namespace OpenBLive.Runtime
 
         private void ProcessNotice(string rawMessage)
         {
-            var json = JObject.Parse(rawMessage);
+            JObject json = null;
+            try
+            {
+                json = JObject.Parse(rawMessage);
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Invalid packet json: " + e.Message + " " + rawMessage);
+                return;
+            }
             
             ReceiveNotice?.Invoke(rawMessage, json);
             var data = json["data"]?.ToString();
@@ -220,6 +240,16 @@ namespace OpenBLive.Runtime
                             var entranceEffect = JsonConvert.DeserializeObject<EntranceEffect>(data);
                             OnEnterRoom?.Invoke(entranceEffect.ToEnterRoom());
                             break;
+                        // 大额礼物无法收到次消息，原因还在探查，暂时不使用Web接收，必须用OpenBLive
+                        /*case "SEND_GIFT":
+                            var receiveGift = JsonConvert.DeserializeObject<RawSendGift>(data);
+                            OnGift?.Invoke(receiveGift.ToSendGift());
+                            break;
+                        case "SEND_COMBO":
+                            var receiveCombo = JsonConvert.DeserializeObject<RawSendCombo>(data);
+                            OnGift?.Invoke(receiveCombo.ToSendGift());
+                            break;
+                        */
                     }
                 }
                 catch (Exception e)

@@ -29,7 +29,7 @@ namespace OpenBLive.Runtime.Data
         
         public EnterRoom ToEnterRoom()
         {
-            Debug.Log("fansMedal is null?: " + (fansMedal == null) + " " + fansMedal?.medal_name);
+            //Debug.Log("fansMedal is null?: " + (fansMedal == null) + " " + fansMedal?.medal_name);
             return new EnterRoom
             {
                 uid = uinfo.uid,

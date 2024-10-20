@@ -104,7 +104,7 @@ namespace OpenBLive.Runtime
             ws.OnOpen += OnOpen;
             ws.OnMessage += data =>
             {
-                //Debug.Log("WebRoom: OnMessage");
+                //Debug.Log("WebRoom: OnMessage" + data.Length + "; " + Encoding.UTF8.GetString(data));
                 ProcessPacket(data);
             };
             ws.OnError += msg =>

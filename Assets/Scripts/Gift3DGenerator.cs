@@ -72,7 +72,7 @@ public class Gift3DGenerator : MonoBehaviour
     {
         if (gift.giftNum==0) return;
         
-        if (gift.giftId <= 10000 || gift.giftId > 10004) return;
+        //if (gift.giftId <= 10000 || gift.giftId > 10004) return;
         
         // try to add gift.giftNum to _giftNums[gift.giftId]
         if (_giftNums.ContainsKey(gift.giftId)) _giftNums[gift.giftId] += gift.giftNum;

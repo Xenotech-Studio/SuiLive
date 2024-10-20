@@ -1,0 +1,132 @@
+{
+  "cmd": "COMBO_SEND",
+  "data": {
+    "action": "投喂",
+    "batch_combo_id": "batch:gift:combo_id:195174802:3546698605398604:31036:1729413585.7116",
+    "batch_combo_num": 9,
+    "coin_type": "gold",
+    "combo_id": "gift:combo_id:195174802:3546698605398604:31036:1729413585.7105",
+    "combo_num": 9,
+    "combo_total_coin": 900,
+    "dmscore": 952,
+    "gift_id": 31036,
+    "gift_info": {
+      "img_basic": "https://s1.hdslb.com/bfs/live/8b40d0470890e7d573995383af8a8ae074d485d9.png",
+      "webp": "https://i0.hdslb.com/bfs/live/28357ba4cd566418730ca29da2c552efa7e4a390.webp"
+    },
+    "gift_name": "小花花",
+    "gift_num": 0,
+    "group_medal": null,
+    "is_join_receiver": false,
+    "is_naming": true,
+    "is_show": 1,
+    "medal_info": {
+      "anchor_roomid": 0,
+      "anchor_uname": "",
+      "guard_level": 3,
+      "icon_id": 0,
+      "is_lighted": 1,
+      "medal_color": 398668,
+      "medal_color_border": 6809855,
+      "medal_color_end": 6850801,
+      "medal_color_start": 398668,
+      "medal_level": 27,
+      "medal_name": "钛岁爷",
+      "special": "",
+      "target_id": 3546698605398604
+    },
+    "name_color": "#00D1F1",
+    "r_uname": "岁岁小师姐OvO",
+    "receive_user_info": {
+      "uid": 3546698605398604,
+      "uname": "岁岁小师姐OvO"
+    },
+    "receiver_uinfo": {
+      "base": {
+      "face": "https://i1.hdslb.com/bfs/face/42edea21938cb5dfbb8f361b63650b29afafd973.jpg",
+      "is_mystery": false,
+      "name": "岁岁小师姐OvO",
+      "name_color": 0,
+      "name_color_str": "",
+      "official_info": {
+      "desc": "",
+      "role": 0,
+      "title": "",
+      "type": -1
+    },
+    "origin_info": {
+    "face": "https://i1.hdslb.com/bfs/face/42edea21938cb5dfbb8f361b63650b29afafd973.jpg",
+    "name": "岁岁小师姐OvO"
+    },
+    "risk_ctrl_info": {
+    "face": "https://i1.hdslb.com/bfs/face/42edea21938cb5dfbb8f361b63650b29afafd973.jpg",
+    "name": "岁岁小师姐OvO"
+    }
+    },
+    "guard": null,
+    "guard_leader": null,
+    "medal": null,
+    "title": null,
+    "uhead_frame": null,
+    "uid": 3546698605398604,
+    "wealth": null
+    },
+    "ruid": 3546698605398604,
+    "send_master": null,
+    "sender_uinfo": {
+        "base": {
+        "face": "https://i1.hdslb.com/bfs/face/50ae4b763e693fe21ef53b0d3398255285ad2a75.jpg",
+        "is_mystery": false,
+        "name": "Stevenです",
+        "name_color": 0,
+        "name_color_str": "",
+          "official_info": {
+          "desc": "",
+          "role": 0,
+          "title": "",
+          "type": -1
+        },
+        "origin_info": {
+          "face": "https://i1.hdslb.com/bfs/face/50ae4b763e693fe21ef53b0d3398255285ad2a75.jpg",
+          "name": "Stevenです"
+        },
+        "risk_ctrl_info": {
+          "face": "https://i1.hdslb.com/bfs/face/50ae4b763e693fe21ef53b0d3398255285ad2a75.jpg",
+          "name": "Stevenです"
+        }
+      },
+      "guard": null,
+      "guard_leader": null,
+      "medal": {
+      "color": 398668,
+      "color_border": 6809855,
+      "color_end": 6850801,
+      "color_start": 398668,
+      "guard_icon": "https://i0.hdslb.com/bfs/live/143f5ec3003b4080d1b5f817a9efdca46d631945.png",
+      "guard_level": 3,
+      "honor_icon": "",
+      "id": 0,
+      "is_light": 1,
+      "level": 27,
+      "name": "钛岁爷",
+      "ruid": 3546698605398604,
+      "score": 50108878,
+      "typ": 0,
+      "user_receive_count": 0,
+      "v2_medal_color_border": "#58A1F8FF",
+      "v2_medal_color_end": "#4775EFCC",
+      "v2_medal_color_level": "#000B7099",
+      "v2_medal_color_start": "#4775EFCC",
+      "v2_medal_color_text": "#FFFFFFFF"
+    },
+    "title": null,
+    "uhead_frame": null,
+    "uid": 195174802,
+    "wealth": null
+    },
+    "total_num": 9,
+    "uid": 195174802,
+    "uname": "Stevenです",
+    "wealth_level": 39
+  }
+}

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using OpenBLive.Runtime.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.XR;
 using VTS.Core;
 
 namespace VTS.Unity.Examples {
@@ -52,11 +54,184 @@ namespace VTS.Unity.Examples {
 		public Vector2 modelPosition = new Vector2(0, 0);
 		public float modelSize = -40;
 		public float modelRotation = 0;
+		
+		// 冲水
+		private bool flushing = false;
+		public float FlushingTime = 3;
+		public float RescueTime = 5;
 
+		// 冲水后回复前的冷却时间
+		public float afterFlushTimer = 0;
+		public float AfterFlushTime = 20;
+
+		// 爬回来的过程
+		public float recoverIntervalTimer = 0f;
+		public float RecoverInterval = 5f;
+		public float PerRecoverAmount = 0.05f;
+		
+		// 触发机制：计数器和计时器
+		public float flushTriggerCounter = 0;
+		public float flushTriggerTimeout = 5;
+		private float flushTriggerTimer = 0;
+		
+		public float rescueTriggerCounter = 0;
+		public float rescueTriggerTimeout = 5;
+		private float rescueTriggerTimer = 0;
+		
 
 		private void Awake() {
 			Connect();
 		}
+
+		public void ReceiveGift(SendGift gift)
+		{
+			Debug.Log("Gift ID "+gift.giftId);
+			if (gift.giftId == 31036)
+			{
+				flushTriggerCounter += gift.giftNum;
+				flushTriggerTimer = flushTriggerTimeout;
+				if ( (flushTriggerCounter) >= 50 )
+				{
+					if (!flushing)
+					{
+						Debug.Log("Flush!");
+						flushTriggerCounter = 0;
+						Flush();
+					}
+					// else: ignore for now, but preserve the counter
+				}
+			}
+
+			if (gift.giftId == 32760)
+			{
+				rescueTriggerCounter += gift.giftNum;
+				flushTriggerTimer = rescueTriggerTimeout;
+				if ( (rescueTriggerCounter) >= 50 )
+				{
+					if (!Closed)
+					{
+						Debug.Log("Rescue!");
+						rescueTriggerCounter = 0;
+						Rescue();
+					}
+					// else: ignore for now, but preserve the counter
+				}
+			}
+		}
+
+		private void UpdateGiftTimer()
+		{
+			if(flushTriggerTimer>0 && flushTriggerCounter>0)
+			{
+				flushTriggerTimer -= Time.deltaTime;
+			}
+			else
+			{
+				flushTriggerCounter = 0;
+			}
+			
+			if (rescueTriggerTimer > 0 && rescueTriggerCounter > 0)
+			{
+				rescueTriggerTimer -= Time.deltaTime;
+			}
+			else
+			{
+				rescueTriggerCounter = 0;
+			}
+		}
+
+		private void Update()
+		{
+			UpdateGiftTimer();
+			
+			// Update Toilet:
+			if(afterFlushTimer > 0)
+			{
+				afterFlushTimer -= Time.deltaTime;
+			}
+			else
+			{
+				if (!Closed && Progress>= 0.05f)
+				{
+					if (recoverIntervalTimer > 0)
+					{
+						recoverIntervalTimer -= Time.deltaTime;
+					}
+					else
+					{
+						StartCoroutine(RescueCoroutine(PerRecoverAmount, 0.5f));
+						recoverIntervalTimer = RecoverInterval;
+					}
+				}
+			}
+			
+			// Debug Test:
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				Flush();
+			}
+
+			if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Space))
+			{
+				Rescue();
+			}
+		}
+		
+		
+		// 冲水
+		private Coroutine RunningFlushCoroutine = null;
+		public void Flush()
+		{
+			if (RunningFlushCoroutine != null) return;
+			if (RunningRescueCoroutine != null) StopCoroutine(RunningRescueCoroutine);
+			RunningFlushCoroutine = StartCoroutine(FlushCoroutine());
+		}
+		public IEnumerator FlushCoroutine()
+		{
+			afterFlushTimer = AfterFlushTime;
+			flushing = true;
+			float timer = 0f;
+			while (timer < FlushingTime)
+			{
+				timer += Time.deltaTime;
+				Progress += 1 * Time.deltaTime / FlushingTime;
+				yield return null;
+			}
+			Progress = 1;
+			RunningFlushCoroutine = null;
+			flushing = false;
+		}
+		
+		// 捞
+		private Coroutine RunningRescueCoroutine = null;
+		public void Rescue()
+		{
+			if (RunningRescueCoroutine != null) return;
+			if (RunningFlushCoroutine != null)
+			{
+				StopCoroutine(RunningFlushCoroutine);
+				flushing = false;
+			}
+			RunningRescueCoroutine = StartCoroutine(RescueCoroutine());
+		}
+		public IEnumerator RescueCoroutine(float amount=1, float time=0)
+		{
+			if (time <= 0.1f) time = RescueTime;
+			float timer = 0f;
+			while (timer < time)
+			{
+				yield return null;
+				if(Closed) continue;
+				timer += Time.deltaTime;
+				Progress -= amount * Time.deltaTime / time;
+				
+			}
+			if(amount>= 0.9f) Progress = 0;
+			RunningRescueCoroutine = null;
+		}
+		
+		
+		
 
 		public void Connect() {
 			this._connectionLight.color = Color.yellow;

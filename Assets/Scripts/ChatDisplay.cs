@@ -80,8 +80,11 @@ public class ChatDisplay : MonoBehaviour
         newItem.GetComponent<ContentSizeFitter>().enabled = true;
         
         if(_scrollToBottomCoroutine!=null) StopCoroutine(_scrollToBottomCoroutine);
-        _scrollToBottomCoroutine = StartCoroutine(ScrollToBottom(0.5f));
-        StartCoroutine(FadeIn(newItem.GetComponent<CanvasGroup>(), 0.5f));
+        if (gameObject.activeSelf)
+        {
+            _scrollToBottomCoroutine = StartCoroutine(ScrollToBottom(0.5f));
+            StartCoroutine(FadeIn(newItem.GetComponent<CanvasGroup>(), 0.5f));
+        }
     }
     
     IEnumerator ScrollToBottom(float time)

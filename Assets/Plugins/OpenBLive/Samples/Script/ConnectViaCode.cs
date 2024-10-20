@@ -64,6 +64,8 @@ public partial class ConnectViaCode : MonoBehaviour
 
         m_WebSocketBLiveWebRoomClient = new WebSocketBLiveWebRoomClient(resObj.GetWssLink(), resObj.GetAuthBody(), RoomId);
         m_WebSocketBLiveWebRoomClient.OnEnterRoom += WebSocketBLiveWebRoomClientOnEnterRoom;
+        m_WebSocketBLiveWebRoomClient.OnGift += WebSocketBLiveWebRoomClientOnSendGift;
+        
         
         try
         {
@@ -191,6 +193,24 @@ public partial class ConnectViaCode : MonoBehaviour
         Debug.Log(sb);
     }
     
+    private void WebSocketBLiveWebRoomClientOnSendGift(SendGift sendGift)
+    {
+        OnGift?.Invoke(sendGift);
+        StringBuilder sb = new StringBuilder("收到礼物!");
+        sb.AppendLine();
+        sb.Append("来自用户：");
+        sb.Append(sendGift.userName);
+        sb.Append("赠送了");
+        sb.Append(sendGift.giftNum);
+        sb.Append("个");
+        sb.Append(sendGift.giftName);
+        sb.Append("ID");
+        sb.Append(sendGift.giftId);
+        sb.Append("价值");
+        sb.Append(sendGift.price);
+        Debug.Log(sb);
+    }
+    
     private void WebSocketBLiveWebRoomClientOnEnterRoom(EnterRoom enterRoom)
     {
         OnEnterRoom?.Invoke(enterRoom);
@@ -224,7 +244,7 @@ public partial class ConnectViaCode : MonoBehaviour
         }
         sb.Append("财富等级: ");
         sb.Append(enterRoom.wealthLevel);
-        Debug.Log(sb);
+        // Debug.Log(sb);
     }
 
 
