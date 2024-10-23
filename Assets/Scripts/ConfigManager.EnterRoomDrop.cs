@@ -70,5 +70,13 @@ namespace SuiLive
             set => DroupCountGuard1Input.text = value.ToString();
         }
 
+        public Slider DropSourceXSlider;
+
+        public float DropSourceXValue
+        {
+            get => DropSourceXSlider.value;
+            set => DropSourceXSlider.value = value;
+        }
+
     }
 }

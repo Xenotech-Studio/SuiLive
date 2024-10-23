@@ -11,5 +11,6 @@ namespace DataSystem
         public int DropCountGuard2 = 1; // 进房掉落数量
         public int DropCountGuard1 = 1; // 进房掉落数量
         public float DropCoolDown = 1f; // 进房掉落冷却时间(分钟)
+        public float DropSourceX = 0.5f;
     }
 }

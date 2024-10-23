@@ -45,6 +45,7 @@ namespace SuiLive
             DropCountGuard3Value = SavedConfig.EnterRoomDrop.DropCountGuard3;
             DropCountGuard2Value = SavedConfig.EnterRoomDrop.DropCountGuard2;
             DropCountGuard1Value = SavedConfig.EnterRoomDrop.DropCountGuard1;
+            DropSourceXValue = SavedConfig.EnterRoomDrop.DropSourceX;
             
             TopicToolEnabledValue = SavedConfig.TopicHelper.Enabled;
             
@@ -62,6 +63,7 @@ namespace SuiLive
             SavedConfig.EnterRoomDrop.DropCountGuard3 = DropCountGuard3Value;
             SavedConfig.EnterRoomDrop.DropCountGuard2 = DropCountGuard2Value;
             SavedConfig.EnterRoomDrop.DropCountGuard1 = DropCountGuard1Value;
+            SavedConfig.EnterRoomDrop.DropSourceX = DropSourceXValue;
             
             SavedConfig.TopicHelper.Enabled = TopicToolEnabledValue;
             
