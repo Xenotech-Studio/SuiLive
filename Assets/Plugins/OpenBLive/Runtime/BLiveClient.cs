@@ -123,7 +123,7 @@ namespace OpenBLive.Runtime
                     //ProcessPacketAsync(packet1);
                     return;
                 case ProtocolVersion.Brotli:
-                    Debug.Log("WebRoom: Brotli Message " + header.Operation);
+                    // Debug.Log("WebRoom: Brotli Message " + header.Operation);
                     int index_in_list = 0;
                     await foreach (var packet1 in BrotliDecompressAsync(packet.PacketBody))
                     {
@@ -133,7 +133,7 @@ namespace OpenBLive.Runtime
                         }
                         catch (Exception e)
                         {
-                            Debug.LogWarning($"Invalid packet [{index_in_list}]: " + packet1.Length + Encoding.UTF8.GetString(packet1));
+                            // Debug.LogWarning($"Invalid packet [{index_in_list}]: " + packet1.Length + Encoding.UTF8.GetString(packet1));
                             return;
                         }
                         ProcessPacketAsync(new Packet(packet1));

@@ -139,12 +139,12 @@ public class Gift3DGenerator : MonoBehaviour
                     {
                         if (tex != null)
                         {
-                            Debug.Log("sprite got");
+                            // Debug.Log("sprite got");
                             image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
                         }
                         else
                         {
-                            Debug.Log("sprite got null");
+                            // Debug.Log("sprite got null");
                         }
                         isDone = true;
                         gift3D.gameObject.SetActive(true);

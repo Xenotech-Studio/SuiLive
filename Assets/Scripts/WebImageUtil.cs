@@ -10,6 +10,7 @@ public static class WebImageUtil
 
     private static Dictionary<string, Sprite> spriteCache = new Dictionary<string, Sprite>();
     private static Dictionary<string, Texture2D> textureCache = new Dictionary<string, Texture2D>();
+    private static List<string> errorCache = new List<string>();
 
     private static Queue<string> spriteQueue = new Queue<string>();
     private static Queue<string> textureQueue = new Queue<string>();
@@ -32,6 +33,12 @@ public static class WebImageUtil
             callback?.Invoke(spriteCache[url]);
             return;
         }
+        
+        if (errorCache.Contains(url))
+        {
+            callback?.Invoke(null);
+            return;
+        }
 
         Texture2D texture = await DownloadTexture(url);
         if (texture != null)
@@ -44,6 +51,7 @@ public static class WebImageUtil
         else
         {
             Debug.LogError($"await DownloadTexture returns null");
+            errorCache.Add(url);
             callback?.Invoke(null);
         }
     }
@@ -55,6 +63,12 @@ public static class WebImageUtil
             callback?.Invoke(textureCache[url]);
             return;
         }
+        
+        if (errorCache.Contains(url))
+        {
+            callback?.Invoke(null);
+            return;
+        }
 
         Texture2D texture = await DownloadTexture(url);
         if (texture != null)
@@ -64,6 +78,7 @@ public static class WebImageUtil
         }
         else
         {
+            errorCache.Add(url);
             callback?.Invoke(null);
         }
     }
