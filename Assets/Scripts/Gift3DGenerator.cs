@@ -18,6 +18,10 @@ public class Gift3DGenerator : MonoBehaviour
     
     [Range(0.5f, 2)]
     public float GiftStartPositionXRange = 1f;
+
+    //[Range(-2f, 2f)] 
+    //public float GiftStartPositionX = 0.5f;
+
     public AnimationCurve PossibilityCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
     
     [HideInInspector] [SerializeField]
@@ -164,6 +168,12 @@ public class Gift3DGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        AvatarCollider.transform.localPosition = new Vector3(
+            x: ConfigManager.Config.EnterRoomDrop.DropSourceX,
+            y: AvatarCollider.transform.localPosition.y,
+            z: AvatarCollider.transform.localPosition.z
+        );
+        
         GiftSource.transform.position = new Vector3(
             x: AvatarCollider.transform.position.x,
             y: GiftSource.transform.position.y,

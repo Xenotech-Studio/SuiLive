@@ -63,6 +63,8 @@ namespace VTS.Unity.Examples {
 		private Coroutine RunningFlushCoroutine = null;
 		public void Flush()
 		{
+			if(!gameObject.activeSelf) return;
+			
 			if (RunningFlushCoroutine != null) return;
 			if (RunningRescueCoroutine != null)
 			{
@@ -92,6 +94,8 @@ namespace VTS.Unity.Examples {
 		private Coroutine RunningRescueCoroutine = null;
 		public void Rescue()
 		{
+			if(!gameObject.activeSelf) return;
+			
 			if (RunningRescueCoroutine != null) return;
 			if (RunningFlushCoroutine != null)
 			{
