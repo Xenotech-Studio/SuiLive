@@ -5,5 +5,6 @@ namespace DataSystem
         public EnterRoomDropConfigData EnterRoomDrop = new EnterRoomDropConfigData();
         public TopicHelperConfigData TopicHelper = new TopicHelperConfigData();
         public WindowSizeConfigData WindowSize = new WindowSizeConfigData();
+        public ToiletConfigData ToiletConfig = new ToiletConfigData();
     }
 }

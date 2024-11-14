@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using OpenBLive.Runtime.Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using VTS.Core;
@@ -24,7 +25,7 @@ namespace VTS.Unity.Examples {
 
 		// 冲水后回复前的冷却时间
 		private float afterFlushTimer = 0;
-		public float AfterFlushTime = 20;
+		public float afterFlushTime => Config.GetAfterFlushTime();
 
 		// 爬回来的过程
 		private float recoverIntervalTimer = 0f;
@@ -76,7 +77,7 @@ namespace VTS.Unity.Examples {
 		}
 		public IEnumerator FlushCoroutine()
 		{
-			afterFlushTimer = AfterFlushTime;
+			afterFlushTimer = afterFlushTime;
 			flushing = true;
 			float timer = 0f;
 			while (Progress<1f && timer < FlushingTime)

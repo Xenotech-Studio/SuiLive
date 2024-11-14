@@ -51,6 +51,13 @@ namespace SuiLive
             
             LockWindowSizeValue = SavedConfig.WindowSize.Locked;
             StayOnTopValue = SavedConfig.WindowSize.StayOnTop;
+
+            ToiletEnabledValue = SavedConfig.ToiletConfig.ToiletEnabled;
+            ToiletPositionXValue = SavedConfig.ToiletConfig.ToiletPositionX;
+            ToiletPositionYValue = SavedConfig.ToiletConfig.ToiletPositionY;
+            ToiletSizeValue = SavedConfig.ToiletConfig.ToiletSize;
+            ModelSizeValue = SavedConfig.ToiletConfig.ModelSize;
+            AfterFlushTimeValue = SavedConfig.ToiletConfig.AfterFlushTime;
         }
 
         public void SaveConfig()
@@ -69,6 +76,13 @@ namespace SuiLive
             
             SavedConfig.WindowSize.Locked = LockWindowSizeValue;
             SavedConfig.WindowSize.StayOnTop = StayOnTopValue;
+
+            SavedConfig.ToiletConfig.ToiletEnabled = ToiletEnabledValue;
+            SavedConfig.ToiletConfig.ToiletPositionX = ToiletPositionXValue;
+            SavedConfig.ToiletConfig.ToiletPositionY = ToiletPositionYValue;
+            SavedConfig.ToiletConfig.ToiletSize = ToiletSizeValue;
+            SavedConfig.ToiletConfig.ModelSize = ModelSizeValue;
+            SavedConfig.ToiletConfig.AfterFlushTime = AfterFlushTimeValue;
         }
 
         private void OnDisable()

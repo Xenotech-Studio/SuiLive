@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using OpenBLive.Runtime.Data;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using VTS.Core;
 
+
 namespace VTS.Unity.Examples {
 
-	public partial class ToiletVTSPlugin : UnityVTSPlugin {
+	public partial class ToiletVTSPlugin : UnityVTSPlugin
+	{
+
+		public ToiletConfigManagerBase Config;
 		
 		[Header("Controls")]
 		[Range(0, 1)]
@@ -54,19 +59,29 @@ namespace VTS.Unity.Examples {
 		public float toiletSize = 0;
 		public float toiletRotation = 0;
 		
+		public Vector2 ToiletPosition => toiletPosition + new Vector2(Config.GetToiletPositionX(), Config.GetToiletPositionY());
+		public float ToiletSize => toiletSize + Config.GetToiletSize();
+		
 		
 		[Header("Live2D Model")]
 		public Vector2 modelPosition = new Vector2(0, 0);
 		public float modelSize = -40;
 		public float modelRotation = 0;
+
+		public Vector2 ModelPosition => modelPosition + new Vector2(Config.GetToiletPositionX(), Config.GetToiletPositionY());
+		public float ModelSize => modelSize + Config.GetModelSize();
 		
 		
 
-		private void Awake() {
+		private void OnEnable() {
 			Connect();
 		}
 
-		
+		private void OnDisable()
+		{
+			Disconnect();
+		}
+
 
 		private void Update()
 		{
@@ -194,10 +209,10 @@ namespace VTS.Unity.Examples {
 			if (this.IsAuthenticated && this._modelMoving) {
 				MoveModel(new VTSMoveModelData.Data()
 				{
-					positionX = modelPosition.x,
-					positionY = modelPosition.y - Progress * Progress * Progress * Progress * Progress * Progress * 1f,
-					size = modelSize - Progress * 20f,
-					rotation = modelRotation + RotationAngle * (rotating ? (float)Math.Sin(Progress*Progress*Progress*RotationSpeed) : 0f)
+					positionX = ModelPosition.x,
+					positionY = ModelPosition.y - Progress * Progress * Progress * Progress * Progress * Progress * 1f,
+					size = ModelSize - Progress * 20f,
+					rotation = modelRotation + RotationAngle * (rotating ? (float)Math.Sin(Progress*Progress*RotationSpeed) : 0f)
 				});
 			}
 
@@ -211,9 +226,9 @@ namespace VTS.Unity.Examples {
 						itemInsanceID = ToiletFrontInstanceId,
 						options = new VTSItemMoveOptions()
 						{
-							positionX = toiletPosition.x,
-							positionY = toiletPosition.y,
-							size = toiletSize,
+							positionX = ToiletPosition.x,
+							positionY = ToiletPosition.y,
+							size = ToiletSize,
 							rotation = toiletRotation,
 							order = 5,
 						}
@@ -223,9 +238,9 @@ namespace VTS.Unity.Examples {
 						itemInsanceID = ToiletBackInstanceId,
 						options = new VTSItemMoveOptions()
 						{
-							positionX = toiletPosition.x,
-							positionY = toiletPosition.y,
-							size = toiletSize,
+							positionX = ToiletPosition.x,
+							positionY = ToiletPosition.y,
+							size = ToiletSize,
 							rotation = toiletRotation,
 							order = ToiletBackOrder,
 						}
@@ -235,9 +250,9 @@ namespace VTS.Unity.Examples {
 						itemInsanceID = ToiletLidInstanceId,
 						options = new VTSItemMoveOptions()
 						{
-							positionX = toiletPosition.x,
-							positionY = toiletPosition.y,
-							size = toiletSize * (Closed? 1 : 0.1f),
+							positionX = ToiletPosition.x,
+							positionY = ToiletPosition.y,
+							size = ToiletSize * (Closed? 1 : 0.1f),
 							rotation = toiletRotation,
 							order = Closed ? ToiletLidOrderClosed : ToiletLidOrderOpened,
 						}

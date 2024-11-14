@@ -7,6 +7,8 @@ namespace TempGameFlow
 {
     public class DevelopmentKeyboardControl : MonoBehaviour
     {
+        public KeyCode CoKey = KeyCode.None;
+        
         public KeyCode[] KeyCodes;
         public UnityEvent[] OnKeyPressed;
 
@@ -14,7 +16,7 @@ namespace TempGameFlow
         {
             for (int i = 0; i < KeyCodes.Length; i++)
             {
-                if (Input.GetKeyDown(KeyCodes[i]))
+                if ((CoKey!=KeyCode.None && Input.GetKey(CoKey)) && Input.GetKeyDown(KeyCodes[i]))
                 {
                     OnKeyPressed[i].Invoke();
                 }
