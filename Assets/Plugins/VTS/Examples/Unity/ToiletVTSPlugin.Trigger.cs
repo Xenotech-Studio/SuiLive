@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using OpenBLive.Runtime.Data;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
@@ -56,6 +57,40 @@ namespace VTS.Unity.Examples {
 					}
 					// else: ignore for now, but preserve the counter
 				}
+			}
+
+			if (gift.giftId == 31088)
+			{
+				StartRandomFloating();
+			}
+		}
+		
+		public void ReceiveDanmaku(Dm danmaku)
+		{
+			if (!gameObject.activeSelf) return;
+			
+			Debug.Log(danmaku.msg);
+			
+			if (danmaku.msg.Contains("加速")||danmaku.msg.Contains("冲"))
+			{
+				if (speed.magnitude < 5)
+				{
+					speed *= 2;
+				}
+				else
+				{
+					angularSpeed *= 2;
+				}
+			}
+
+			if (danmaku.msg.Contains("停")||danmaku.msg=="定")
+			{
+				if (speed.magnitude > 0.3)
+				{
+					speed = speed.normalized * 0.3f;
+				}
+
+				angularSpeed = Math.Sign(angularSpeed) * 20;
 			}
 		}
 

@@ -17,6 +17,8 @@ namespace VTS.Unity.Examples {
 
 		public ToiletConfigManagerBase Config;
 		
+		
+		
 		[Header("Controls")]
 		[Range(0, 1)]
 		public float Progress = 0.0f;
@@ -206,61 +208,150 @@ namespace VTS.Unity.Examples {
 			if(Closed && !closedLastFrame && CloseAudio!=null) AudioSource.PlayClipAtPoint(CloseAudio, Vector3.zero);
 			if (!Closed && closedLastFrame && CloseAudio != null) AudioSource.PlayClipAtPoint(OpenAudio, Vector3.zero);
 			closedLastFrame = Closed;
-			
-			
-			if (this.IsAuthenticated && this._modelMoving) {
-				MoveModel(new VTSMoveModelData.Data()
-				{
-					positionX = ModelPosition.x,
-					positionY = ModelPosition.y - Progress * Progress * Progress * Progress * Progress * Progress * 1f,
-					size = ModelSize - Progress * 20f,
-					rotation = modelRotation + RotationAngle * (rotating ? (float)Math.Sin(Progress*Progress*RotationSpeed) : 0f)
-				});
-			}
 
-			if (this.IsAuthenticated && this._toiletFrontReady && this._toiletBackReady && this._toiletLidReady)
+
+			if (randomFloatingTimer <= 0)
 			{
 
-				MoveItem(new VTSItemMoveEntry[]
+				if (this.IsAuthenticated && this._modelMoving)
 				{
-					new VTSItemMoveEntry()
+					MoveModel(new VTSMoveModelData.Data()
 					{
-						itemInsanceID = ToiletFrontInstanceId,
-						options = new VTSItemMoveOptions()
-						{
-							positionX = ToiletPosition.x,
-							positionY = ToiletPosition.y,
-							size = ToiletSize,
-							rotation = toiletRotation,
-							order = 5,
-						}
-					},
-					new VTSItemMoveEntry()
+						positionX = ModelPosition.x,
+						positionY = ModelPosition.y -
+						            Progress * Progress * Progress * Progress * Progress * Progress * 1f,
+						size = ModelSize - Progress * 20f,
+						rotation = modelRotation + RotationAngle *
+							(rotating ? (float)Math.Sin(Progress * Progress * RotationSpeed) : 0f)
+					});
+				}
+
+				if (this.IsAuthenticated && this._toiletFrontReady && this._toiletBackReady && this._toiletLidReady)
+				{
+
+					MoveItem(new VTSItemMoveEntry[]
 					{
-						itemInsanceID = ToiletBackInstanceId,
-						options = new VTSItemMoveOptions()
+						new VTSItemMoveEntry()
 						{
-							positionX = ToiletPosition.x,
-							positionY = ToiletPosition.y,
-							size = ToiletSize,
-							rotation = toiletRotation,
-							order = ToiletBackOrder,
-						}
-					},
-					new VTSItemMoveEntry()
-					{
-						itemInsanceID = ToiletLidInstanceId,
-						options = new VTSItemMoveOptions()
+							itemInsanceID = ToiletFrontInstanceId,
+							options = new VTSItemMoveOptions()
+							{
+								positionX = ToiletPosition.x,
+								positionY = ToiletPosition.y,
+								size = ToiletSize,
+								rotation = toiletRotation,
+								order = 5,
+							}
+						},
+						new VTSItemMoveEntry()
 						{
-							positionX = ToiletPosition.x,
-							positionY = ToiletPosition.y,
-							size = ToiletSize * (Closed? 1 : 0.1f),
-							rotation = toiletRotation,
-							order = Closed ? ToiletLidOrderClosed : ToiletLidOrderOpened,
-						}
-					},
+							itemInsanceID = ToiletBackInstanceId,
+							options = new VTSItemMoveOptions()
+							{
+								positionX = ToiletPosition.x,
+								positionY = ToiletPosition.y,
+								size = ToiletSize,
+								rotation = toiletRotation,
+								order = ToiletBackOrder,
+							}
+						},
+						new VTSItemMoveEntry()
+						{
+							itemInsanceID = ToiletLidInstanceId,
+							options = new VTSItemMoveOptions()
+							{
+								positionX = ToiletPosition.x,
+								positionY = ToiletPosition.y,
+								size = ToiletSize * (Closed ? 1 : 0.1f),
+								rotation = toiletRotation,
+								order = Closed ? ToiletLidOrderClosed : ToiletLidOrderOpened,
+							}
+						},
+					});
+				}
+			}
+			else if (this.IsAuthenticated && this._modelMoving)
+			{
+				
+				randomFloatingTimer -= Time.fixedDeltaTime;
+				
+				position += speed * Time.fixedDeltaTime;
+				rotation += angularSpeed * Time.fixedDeltaTime;
+				
+
+				if (position.x < -1f || position.x > 1f)
+				{
+					speed.x = -speed.x;
+					float newAngularSpeed = angularSpeed - Math.Sign(angularSpeed) * speed.magnitude * 360;
+					newAngularSpeed = Math.Abs(newAngularSpeed) > Math.Abs(angularSpeed)/2 ? newAngularSpeed : -angularSpeed;
+					angularSpeed = newAngularSpeed;
+				}
+
+				if (position.y < -1 || position.y > 1)
+				{
+					speed.y = -speed.y;
+					float newAngularSpeed = angularSpeed - Math.Sign(angularSpeed) * speed.magnitude * 360;
+					newAngularSpeed = Math.Abs(newAngularSpeed) > Math.Abs(angularSpeed)/2 ? newAngularSpeed : -angularSpeed;
+					angularSpeed = newAngularSpeed;
+				}
+				
+				
+				
+				MoveModel(new VTSMoveModelData.Data()
+				{
+					positionX = position.x,
+					positionY = position.y,
+					size = -93f,
+					rotation = rotation % 360
 				});
+			}
+		}
+		
+		[Header("Floating")]
+
+		public float RandomFloatingDuration = 60;
+		public float randomFloatingTimer = 0;
+		
+		Vector2 speed = new Vector2(0, 0);
+		float angularSpeed = 0;
+		
+		Vector2 position = new Vector2(0, 0);
+		float rotation = 0;
+		
+		public void StartRandomFloating()
+		{
+			randomFloatingTimer = RandomFloatingDuration;
+			speed = new Vector2(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-1f, 1f)).normalized * 0.3f;
+			angularSpeed = UnityEngine.Random.Range(-90f, 90f);
+		}
+	}
+}
+
+#if UNITY_EDITOR
+namespace VTS.Unity.Examples {
+	public partial class ToiletVTSPlugin : UnityVTSPlugin
+	{
+		[UnityEditor.CustomEditor(typeof(ToiletVTSPlugin))]
+		public class ToiletVTSPluginEditor : UnityEditor.Editor
+		{
+			public override void OnInspectorGUI()
+			{
+				DrawDefaultInspector();
+				ToiletVTSPlugin myScript = (ToiletVTSPlugin)target;
+				if (GUILayout.Button("Start Random Floating"))
+				{
+					myScript.StartRandomFloating();
+				}
+				if (GUILayout.Button("Speed Up"))
+				{
+					myScript.ReceiveDanmaku(new Dm(){msg = "加速"});
+				}
+				if (GUILayout.Button("Speed Down"))
+				{
+					myScript.ReceiveDanmaku(new Dm(){msg = "停"});
+				}
 			}
 		}
 	}
 }
+#endif
