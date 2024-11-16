@@ -32,6 +32,14 @@ namespace SuiLive
             set => ToiletPositionYSlider.value = value;
         }
         
+        public Slider ModelPositionYSlider;
+
+        public float ModelPositionYValue
+        {
+            get => ModelPositionYSlider.value;
+            set => ModelPositionYSlider.value = value;
+        }
+        
         
             
         public Slider ToiletSizeSlider;
@@ -50,13 +58,22 @@ namespace SuiLive
             set => ModelSizeSlider.value = value;
         }
         
+        public TMP_InputField FlushAminTimeInput;
+        
+        public float FlushAnimTimeValue
+        {
+            get => float.Parse(FlushAminTimeInput.text);
+            set => FlushAminTimeInput.text = value.ToString();
+        }
+        
         public TMP_InputField AfterFlushTimeInput;
         
-        public int AfterFlushTimeValue
+        public float AfterFlushTimeValue
         {
-            get => int.Parse(AfterFlushTimeInput.text);
+            get => float.Parse(AfterFlushTimeInput.text);
             set => AfterFlushTimeInput.text = value.ToString();
         }
+        
 
     }
 }

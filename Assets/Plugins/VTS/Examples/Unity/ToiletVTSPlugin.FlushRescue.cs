@@ -18,8 +18,8 @@ namespace VTS.Unity.Examples {
 		private bool flushing = false;
 		
 		[Header("冲水动画相关参数")]
-		public float FlushingTime = 3;
 		public float RescueTime = 5;
+		public float FlushingTime => Config.GetFlushAnimTime();
 		public float RotationSpeed = 1;
 		public float RotationAngle = 2;
 

@@ -5,8 +5,10 @@ namespace DataSystem
         public bool ToiletEnabled;
         public float ToiletPositionX;
         public float ToiletPositionY;
+        public float ModelPositionY;
         public float ToiletSize;
         public float ModelSize;
-        public int AfterFlushTime = 20;
+        public float FlushAnimTime = 5;
+        public float AfterFlushTime = 20;
     }
 }
