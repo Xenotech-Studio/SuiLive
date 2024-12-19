@@ -8,6 +8,8 @@ namespace VTS.Unity.Examples
 
         public abstract float GetToiletPositionY();
         
+        public abstract float GetModelPositionX();
+        
         public abstract float GetModelPositionY();
 
         public abstract float GetToiletSize();

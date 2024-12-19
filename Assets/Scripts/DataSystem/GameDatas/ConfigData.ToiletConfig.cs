@@ -5,6 +5,7 @@ namespace DataSystem
         public bool ToiletEnabled;
         public float ToiletPositionX;
         public float ToiletPositionY;
+        public float ModelPositionX;
         public float ModelPositionY;
         public float ToiletSize;
         public float ModelSize;

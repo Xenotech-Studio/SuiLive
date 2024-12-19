@@ -11,6 +11,7 @@ namespace DefaultNamespace
         
         public override float GetToiletPositionX() => ConfigManager.SavedConfig.ToiletConfig.ToiletPositionX;
         public override float GetToiletPositionY() => ConfigManager.SavedConfig.ToiletConfig.ToiletPositionY;
+        public override float GetModelPositionX() => ConfigManager.SavedConfig.ToiletConfig.ModelPositionX;
         public override float GetModelPositionY() => ConfigManager.SavedConfig.ToiletConfig.ModelPositionY;
         public override float GetToiletSize() => ConfigManager.SavedConfig.ToiletConfig.ToiletSize;
         public override float GetModelSize() => ConfigManager.SavedConfig.ToiletConfig.ModelSize;

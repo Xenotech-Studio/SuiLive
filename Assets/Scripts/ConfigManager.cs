@@ -58,6 +58,7 @@ namespace SuiLive
             FlushAnimTimeValue = SavedConfig.ToiletConfig.FlushAnimTime;
             ToiletSizeValue = SavedConfig.ToiletConfig.ToiletSize;
             ModelSizeValue = SavedConfig.ToiletConfig.ModelSize;
+            ModelPositionXValue = SavedConfig.ToiletConfig.ModelPositionX;
             ModelPositionYValue = SavedConfig.ToiletConfig.ModelPositionY;
             AfterFlushTimeValue = SavedConfig.ToiletConfig.AfterFlushTime;
         }
@@ -82,6 +83,7 @@ namespace SuiLive
             SavedConfig.ToiletConfig.ToiletEnabled = ToiletEnabledValue;
             SavedConfig.ToiletConfig.ToiletPositionX = ToiletPositionXValue;
             SavedConfig.ToiletConfig.ToiletPositionY = ToiletPositionYValue;
+            SavedConfig.ToiletConfig.ModelPositionX = ModelPositionXValue;
             SavedConfig.ToiletConfig.ModelPositionY = ModelPositionYValue;
             SavedConfig.ToiletConfig.ToiletSize = ToiletSizeValue;
             SavedConfig.ToiletConfig.ModelSize = ModelSizeValue;

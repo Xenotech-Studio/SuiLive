@@ -32,6 +32,14 @@ namespace SuiLive
             set => ToiletPositionYSlider.value = value;
         }
         
+        public Slider ModelPositionXSlider;
+        public float ModelPositionXValue
+        {
+            get => ModelPositionXSlider.value;
+            set => ModelPositionXSlider.value = value;
+        }
+        
+        
         public Slider ModelPositionYSlider;
 
         public float ModelPositionYValue

@@ -72,7 +72,7 @@ namespace VTS.Unity.Examples {
 
 		public Vector2 ModelPosition => modelPosition 
 		                                + new Vector2(Config.GetToiletPositionX(), Config.GetToiletPositionY())
-		                                + new Vector2(0, Config.GetModelPositionY());
+		                                + new Vector2(Config.GetModelPositionX(), Config.GetModelPositionY());
 		public float ModelSize => modelSize + Config.GetModelSize();
 		
 		
