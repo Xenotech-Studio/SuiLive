@@ -27,7 +27,8 @@ namespace VTS.Unity.Examples {
 		public void ReceiveGift(SendGift gift)
 		{
 			Debug.Log("Gift ID "+gift.giftId);
-			if (gift.giftId == 31036)
+			//if (gift.giftId == 31036)
+			if (gift.giftId == 33988)
 			{
 				flushTriggerCounter += gift.giftNum;
 				flushTriggerTimer = flushTriggerTimeout;
