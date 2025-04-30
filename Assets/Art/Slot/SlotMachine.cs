@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
+using SuiLive;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -114,6 +117,13 @@ public class SlotMachine : MonoBehaviour
         SlotProgress = Mathf.Repeat(_rawProgress, 1f);
         if (SlotMaterial != null)
             SlotMaterial.SetFloat("_Offset", SlotProgress);
+        
+        // apply 
+        List<float> weights = ConfigManager.SavedConfig.SlotConfig.Weights;
+        for (int i = 0; i < Math.Min(weights.Count, PrizeWeights.Count); ++i)
+        {
+            PrizeWeights[i] = weights[i];
+        }
     }
 
     /* ---------- 模式分支 ---------- */

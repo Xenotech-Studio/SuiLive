@@ -1,5 +1,6 @@
 using System;
 using SuiLive;
+using TMPro;
 using UnityEngine;
 using VTS.Unity.Examples;
 
@@ -7,15 +8,17 @@ namespace DefaultNamespace
 {
     public class SlotEnableManager : MonoBehaviour
     {
-        public GameObject ToiletRoot;
+        public SlotMachine SlotRoot;
         
         public GameObject SlotQuickBar;
         
         public InfoHelperButtonBarHeightHelper InfoHelperButtonBarHeightHelper;
+        
+        public TMP_InputField GiftKeysDisplay;
 
         public void Update()
         {
-            ToiletRoot.SetActive(ConfigManager.SavedConfig.SlotConfig.SlotEnabled);
+            SlotRoot.gameObject.SetActive(ConfigManager.SavedConfig.SlotConfig.SlotEnabled);
             
             if (SlotQuickBar != null)
             {
@@ -25,6 +28,34 @@ namespace DefaultNamespace
             if (InfoHelperButtonBarHeightHelper != null)
             {
                 InfoHelperButtonBarHeightHelper.HasBottomBar = ConfigManager.SavedConfig.SlotConfig.SlotEnabled;
+            }
+            
+            if (GiftKeysDisplay != null)
+            {
+                string text = "";
+                foreach (var key in SlotRoot.SlotItems)
+                {
+                    text += key + "\n";
+                }
+                GiftKeysDisplay.text = text;
+            }
+            
+            if (ConfigManager.Config.SlotConfig.Weights.Count < SlotRoot.SlotItems.Count)
+            {
+                for (int i = ConfigManager.SavedConfig.SlotConfig.Weights.Count; i < SlotRoot.SlotItems.Count; i++)
+                {
+                    ConfigManager.SavedConfig.SlotConfig.Weights.Add(1);
+                }
+                ConfigManager.Save();
+            }
+            
+            if (ConfigManager.Config.SlotConfig.Weights.Count > SlotRoot.SlotItems.Count)
+            {
+                for (int i = ConfigManager.SavedConfig.SlotConfig.Weights.Count; i > SlotRoot.SlotItems.Count; i--)
+                {
+                    ConfigManager.SavedConfig.SlotConfig.Weights.RemoveAt(i - 1);
+                }
+                ConfigManager.Save();
             }
         }
     }

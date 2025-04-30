@@ -30,6 +30,12 @@ namespace SuiLive
         
         public static ConfigData SavedConfig => GameProgressData.Instance.Config;
 
+        public static void Save()
+        {
+            GameProgressData.Save();
+            Instance.InitConfigEditor();
+        }
+
         public void OnEnable()
         {
             InitConfigEditor();
@@ -63,6 +69,7 @@ namespace SuiLive
             AfterFlushTimeValue = SavedConfig.ToiletConfig.AfterFlushTime;
             
             SlotEnabledValue = SavedConfig.SlotConfig.SlotEnabled;
+            WeightsValue = SavedConfig.SlotConfig.Weights;
         }
 
         public void SaveConfig()
@@ -93,6 +100,7 @@ namespace SuiLive
             SavedConfig.ToiletConfig.AfterFlushTime = AfterFlushTimeValue;
             
             SavedConfig.SlotConfig.SlotEnabled = SlotEnabledValue;
+            SavedConfig.SlotConfig.Weights = WeightsValue;
         }
 
         private void OnDisable()
