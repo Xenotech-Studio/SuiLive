@@ -46,6 +46,8 @@ public class SlotMachine : MonoBehaviour
     [Header("=== 奖品数据 ===")]
     public List<string> SlotItems            = new();
     public List<float>  PrizeStartProgresses = new();   // 升序 ∈[0,1)
+    [Tooltip("与 SlotItems 等长；每项 > 0；值越大越容易抽到")]
+    public List<float> PrizeWeights = new();
 
     /* ---------- 调参模式 ---------- */
     [Header("=== 调参模式 ===")]
@@ -150,20 +152,38 @@ public class SlotMachine : MonoBehaviour
         _rawProgress += CurrentSpeed * dt;
         CurrentSpeed  = Mathf.Max(0f, CurrentSpeed - Friction * dt);
 
-        if (CurrentSpeed <= StoppingSpeed) DecidePrizeAndAlign();
+        if (CurrentSpeed <= StoppingSpeed) DecidePrizeAndAlign_Random();
+    }
+    
+    /* ---------- NEW: 加权随机抽奖 ---------- */
+    private int WeightedRandomIndex()
+    {
+        float total = 0f;
+        foreach (var w in PrizeWeights) total += w;
+
+        float r = Random.Range(0f, total);
+        float acc = 0f;
+        for (int i = 0; i < PrizeWeights.Count; ++i)
+        {
+            acc += PrizeWeights[i];
+            if (r <= acc) return i;
+        }
+        return PrizeWeights.Count - 1;   // 理论到不了这里
     }
 
-    private void DecidePrizeAndAlign()
+    /* ---------- MOD: 选奖并开始对齐 ---------- */
+    private void DecidePrizeAndAlign_Random()
     {
-        float pos   = Mathf.Repeat(_rawProgress, 1f);
-        _prizeIndex = FindPrizeIndex(pos);
-        float mid   = PrizeMidPoint(_prizeIndex);
+        _prizeIndex = WeightedRandomIndex();          // ★ 随机抽奖
 
-        int loops   = Mathf.RoundToInt(_rawProgress - mid);
-        _targetRaw  = loops + mid;
+        float mid  = PrizeMidPoint(_prizeIndex);
 
-        _aligning         = true;
-        _alignEntrySpeed  = Mathf.Abs(CurrentSpeed);   // ★ 记录进入速度
+        // 计算最近的整数圈数，保持滚动连贯
+        int loops  = Mathf.RoundToInt(_rawProgress - mid);
+        _targetRaw = loops + mid;
+
+        _aligning        = true;
+        _alignEntrySpeed = Mathf.Abs(CurrentSpeed);
     }
 
     /* ---------- 弹簧一步 (含可变阻尼) ---------- */
