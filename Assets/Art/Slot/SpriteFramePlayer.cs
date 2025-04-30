@@ -14,6 +14,8 @@ public class SpriteFramePlayer : MonoBehaviour
 
     [Tooltip("帧率；比如 12 表示每秒 12 帧")]
     public float frameRate = 12f;
+    
+    public void SetFraneRate(float rate) { frameRate = rate; }
 
     [Tooltip("是否循环播放")]
     public bool loop = true;
@@ -65,6 +67,15 @@ public class SpriteFramePlayer : MonoBehaviour
             
             
         }
+    }
+    
+    public void GoToSpecificFrame(int index)
+    {
+        if (index < 0 || index >= frames.Length) return;
+
+        _currentIndex = index;
+        
+        _sr.sprite    = frames[_currentIndex];
     }
 
     void Update()

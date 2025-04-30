@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -63,6 +64,10 @@ public class SlotMachine : MonoBehaviour
     private float _resultTimer   = 0f;
     private float _alignEntrySpeed = 0f;       // ★ 进入 Aligning 时的绝对速度
 
+    public UnityEvent OnEnterNormal;
+    public UnityEvent OnEnterRunning;
+    public UnityEvent OnEnterShowingResult;
+
     /* ---------- 生命周期 ---------- */
     private void OnValidate()
     {
@@ -83,6 +88,8 @@ public class SlotMachine : MonoBehaviour
         _rawProgress   = SlotProgress;
         CurrentSpeed   = Random.Range(RunningInitialSpeedRange.x,
                                       RunningInitialSpeedRange.y);
+        
+        OnEnterRunning?.Invoke();
     }
 
     /* ---------- MonoBehaviour ---------- */
@@ -111,7 +118,11 @@ public class SlotMachine : MonoBehaviour
     private void ResultHoldUpdate(float dt)
     {
         _resultTimer -= dt;
-        if (_resultTimer <= 0f) _showingResult = false;
+        if (_resultTimer <= 0f)
+        {
+            _showingResult = false;
+            OnEnterNormal?.Invoke();
+        }
     }
 
     private void TuningUpdate(float dt)
@@ -190,6 +201,9 @@ public class SlotMachine : MonoBehaviour
                 SlotRunning     = false;
                 _showingResult  = true;
                 _resultTimer    = ResultHoldSeconds;
+                
+                OnEnterShowingResult?.Invoke();
+                
                 Debug.Log($"🎉 Prize: {_prizeIndex} ({SlotItems[_prizeIndex]})");
             }
         }
