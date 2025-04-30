@@ -66,7 +66,7 @@ public class SlotMachine : MonoBehaviour
 
     public UnityEvent OnEnterNormal;
     public UnityEvent OnEnterRunning;
-    public UnityEvent OnEnterShowingResult;
+    public UnityEvent<string> OnEnterShowingResult;
 
     /* ---------- 生命周期 ---------- */
     private void OnValidate()
@@ -202,7 +202,7 @@ public class SlotMachine : MonoBehaviour
                 _showingResult  = true;
                 _resultTimer    = ResultHoldSeconds;
                 
-                OnEnterShowingResult?.Invoke();
+                OnEnterShowingResult?.Invoke(SlotItems[_prizeIndex]);
                 
                 Debug.Log($"🎉 Prize: {_prizeIndex} ({SlotItems[_prizeIndex]})");
             }
