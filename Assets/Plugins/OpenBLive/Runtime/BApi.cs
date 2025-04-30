@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenBLive.Runtime.Data;
 using OpenBLive.Runtime.Utilities;
+using UnityEngine;
 using Logger = OpenBLive.Runtime.Utilities.Logger;
 #if NET5_0_OR_GREATER
 using System.Net;
@@ -69,9 +71,14 @@ namespace OpenBLive.Runtime
             query["id"] = roomId.ToString();
             builder.Query = query.ToString();
             string url = builder.ToString();
+            
+            Debug.Log(url);
 
-            var result = await RequestWebUTF8(url, "GET", "");
-            return result;
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0");
+            string json = await client.GetStringAsync(url);
+            return json;
         }
 
 

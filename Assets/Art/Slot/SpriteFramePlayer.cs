@@ -1,9 +1,9 @@
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditorInternal;
 #endif
 
 [RequireComponent(typeof(Image))] [ExecuteAlways]

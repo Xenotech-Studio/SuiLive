@@ -81,7 +81,7 @@ public class SlotMachine : MonoBehaviour
         _prizeIndex    = -1;
 
         _rawProgress   = SlotProgress;
-        CurrentSpeed   = - Random.Range(RunningInitialSpeedRange.x,
+        CurrentSpeed   = Random.Range(RunningInitialSpeedRange.x,
                                       RunningInitialSpeedRange.y);
     }
 
