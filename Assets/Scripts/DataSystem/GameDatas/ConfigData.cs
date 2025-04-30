@@ -6,5 +6,6 @@ namespace DataSystem
         public TopicHelperConfigData TopicHelper = new TopicHelperConfigData();
         public WindowSizeConfigData WindowSize = new WindowSizeConfigData();
         public ToiletConfigData ToiletConfig = new ToiletConfigData();
+        public SlotConfigData SlotConfig = new SlotConfigData();
     }
 }

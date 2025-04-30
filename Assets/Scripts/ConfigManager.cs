@@ -61,6 +61,8 @@ namespace SuiLive
             ModelPositionXValue = SavedConfig.ToiletConfig.ModelPositionX;
             ModelPositionYValue = SavedConfig.ToiletConfig.ModelPositionY;
             AfterFlushTimeValue = SavedConfig.ToiletConfig.AfterFlushTime;
+            
+            SlotEnabledValue = SavedConfig.SlotConfig.SlotEnabled;
         }
 
         public void SaveConfig()
@@ -89,6 +91,8 @@ namespace SuiLive
             SavedConfig.ToiletConfig.ModelSize = ModelSizeValue;
             SavedConfig.ToiletConfig.FlushAnimTime = FlushAnimTimeValue;
             SavedConfig.ToiletConfig.AfterFlushTime = AfterFlushTimeValue;
+            
+            SavedConfig.SlotConfig.SlotEnabled = SlotEnabledValue;
         }
 
         private void OnDisable()

@@ -99,6 +99,7 @@ Material:
     - _ColorMask: 15
     - _Cull: 2
     - _Cutoff: 0.5
+    - _DeltaOffset: -0.4185
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -109,7 +110,7 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _Offset: 0
+    - _Offset: 0.3335
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
