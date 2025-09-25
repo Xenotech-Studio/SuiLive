@@ -70,6 +70,12 @@ namespace SuiLive
             
             SlotEnabledValue = SavedConfig.SlotConfig.SlotEnabled;
             WeightsValue = SavedConfig.SlotConfig.Weights;
+
+            CountdownEnabledValue = SavedConfig.CountdownConfig.CountdownEnabled;
+            CountdownPositionXValue = SavedConfig.CountdownConfig.CountdownPositionX;
+            CountdownPositionYValue = SavedConfig.CountdownConfig.CountdownPositionY;
+            CountdownSizeValue = SavedConfig.CountdownConfig.CountdownSize;
+            CountdownSecondsValue = SavedConfig.CountdownConfig.CountdownSeconds;
         }
 
         public void SaveConfig()
@@ -101,6 +107,12 @@ namespace SuiLive
             
             SavedConfig.SlotConfig.SlotEnabled = SlotEnabledValue;
             SavedConfig.SlotConfig.Weights = WeightsValue;
+
+            SavedConfig.CountdownConfig.CountdownEnabled = CountdownEnabledValue;
+            SavedConfig.CountdownConfig.CountdownPositionX = CountdownPositionXValue;
+            SavedConfig.CountdownConfig.CountdownPositionY = CountdownPositionYValue;
+            SavedConfig.CountdownConfig.CountdownSize = CountdownSizeValue;
+            SavedConfig.CountdownConfig.CountdownSeconds = CountdownSecondsValue;
         }
 
         private void OnDisable()
@@ -130,5 +142,7 @@ namespace SuiLive
             get => StayOnTopToggle.isOn;
             set => StayOnTopToggle.isOn = value;
         }
+
+        
     }
 }

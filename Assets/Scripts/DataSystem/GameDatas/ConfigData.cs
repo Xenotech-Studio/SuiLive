@@ -7,5 +7,6 @@ namespace DataSystem
         public WindowSizeConfigData WindowSize = new WindowSizeConfigData();
         public ToiletConfigData ToiletConfig = new ToiletConfigData();
         public SlotConfigData SlotConfig = new SlotConfigData();
+        public CountdownConfigData CountdownConfig = new CountdownConfigData();
     }
 }
