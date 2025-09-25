@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"dotrush.roslyn.projectOrSolutionFiles": [
+			"./XenoWanderer.sln"
+		],
+		"files.exclude": {
+			"*.csproj": true,
+			"**/.fork": true,
+			"**/.idea": true,
+			"**/.utmp": true,
+			"**/.vscode": true,
+			"**/MemoryCaptures": true
+		}
+	}
+}
