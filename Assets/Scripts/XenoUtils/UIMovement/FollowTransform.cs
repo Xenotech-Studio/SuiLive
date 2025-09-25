@@ -151,6 +151,16 @@ public class FollowTransform : MonoBehaviour
         FollowedTransform = newTransform;
         Update();
     }
+
+    public void ChangeParent(Transform newParent)
+    {
+        if (newParent == null) return;
+
+        // Reparent and reset local transform to align with the new parent
+        transform.SetParent(newParent, false);
+
+        Update();
+    }
 }
 
 #if UNITY_EDITOR
@@ -223,22 +233,19 @@ public class FollowTransformEditor : Editor
             EditorUtility.SetDirty(instance);
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         }
-        
-        VXRFieldTools.DrawHiddenFields(ref ShowHiddenFields, serializedObject);
 
-        if (ShowHiddenFields)
+        if (GUILayout.Button("Follow Now"))
         {
-            if (GUILayout.Button("Follow Now"))
+            instance.Follow();
+            // if not in play mode, set dirty
+            if (!EditorApplication.isPlaying)
             {
-                instance.Follow();
-                // if not in play mode, set dirty
-                if (!EditorApplication.isPlaying)
-                {
-                    EditorUtility.SetDirty(instance);
-                    EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-                }
+                EditorUtility.SetDirty(instance);
+                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             }
         }
+        
+        VXRFieldTools.DrawHiddenFields(ref ShowHiddenFields, serializedObject);
     }
 
     

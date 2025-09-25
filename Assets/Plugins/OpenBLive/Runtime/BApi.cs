@@ -61,7 +61,7 @@ namespace OpenBLive.Runtime
         private const string k_Post = "POST";
 
         private const string WebRoomDomain = "https://api.live.bilibili.com";
-        private const string k_WebRoomInfo = "/xlive/web-room/v1/index/getDanmuInfo";
+        private const string k_WebRoomInfo = "/xlive/web-room/v1/index/getDanmuInfo?id=1768085830&type=0&web_location=444.8&w_rid=b3e1865bc23e5462379340e8e4a5d5aa&wts=1748330534";
         
         
         public static async Task<string> GetWebRoomInfo(int roomId)
