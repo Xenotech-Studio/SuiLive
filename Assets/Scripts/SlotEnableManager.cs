@@ -32,12 +32,7 @@ namespace DefaultNamespace
             
             if (GiftKeysDisplay != null)
             {
-                string text = "";
-                foreach (var key in SlotRoot.SlotItems)
-                {
-                    text += key + "\n";
-                }
-                GiftKeysDisplay.text = text;
+                GiftKeysDisplay.text = string.Join("\n", SlotRoot.SlotItems);
             }
             
             if (ConfigManager.Config.SlotConfig.Weights.Count < SlotRoot.SlotItems.Count)
