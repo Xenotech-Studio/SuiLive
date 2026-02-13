@@ -17,6 +17,8 @@ public class SlotMachine : MonoBehaviour
     [Range(0, 1)] public float SlotProgress = 0f;
     public float StaticScrollSpeed = 1f;
     public Material SlotMaterial;
+    [Tooltip("用于保持贴图比例不扁：指定显示转轮的 UI Rect（如挂材质的 Image）。不填则按原样拉伸。")]
+    public RectTransform SlotDisplayRect;
 
     /* ---------- 运行开关 ---------- */
     [Header("=== 运行开关 ===")]
@@ -47,8 +49,9 @@ public class SlotMachine : MonoBehaviour
 
     /* ---------- 奖品数据 ---------- */
     [Header("=== 奖品数据 ===")]
+    [Tooltip("换新长图：1) 材质 SlotMaterial 的 Texture 0 换成新图 2) 这里填好所有选项名 3) 点 Inspector 底部「根据 SlotItems 自动填充 PrizeStartProgresses」")]
     public List<string> SlotItems            = new();
-    public List<float>  PrizeStartProgresses = new();   // 升序 ∈[0,1)
+    public List<float>  PrizeStartProgresses = new();   // 升序 ∈[0,1)，与 SlotItems 等长；等分时即为 0,1/N,2/N,...,(N-1)/N
     [Tooltip("与 SlotItems 等长；每项 > 0；值越大越容易抽到")]
     public List<float> PrizeWeights = new();
 
@@ -116,8 +119,22 @@ public class SlotMachine : MonoBehaviour
 
         SlotProgress = Mathf.Repeat(_rawProgress, 1f);
         if (SlotMaterial != null)
+        {
             SlotMaterial.SetFloat("_Offset", SlotProgress);
-        
+            if (SlotMaterial.HasProperty("_TextureAspect"))
+            {
+                var tex = SlotMaterial.GetTexture("_Texture0");
+                if (tex != null)
+                    SlotMaterial.SetFloat("_TextureAspect", (float)tex.width / Mathf.Max(1, tex.height));
+            }
+            if (SlotMaterial.HasProperty("_QuadAspect"))
+            {
+                float quadAspect = (SlotDisplayRect != null && SlotDisplayRect.rect.height > 0.001f)
+                    ? (SlotDisplayRect.rect.width / SlotDisplayRect.rect.height) : 0f;
+                SlotMaterial.SetFloat("_QuadAspect", quadAspect);
+            }
+        }
+
         // apply 
         List<float> weights = ConfigManager.SavedConfig.SlotConfig.Weights;
         for (int i = 0; i < Math.Min(weights.Count, PrizeWeights.Count); ++i)
@@ -280,6 +297,16 @@ public class SlotMachineEditor : Editor
         {
             if (GUILayout.Button("Start One Game"))
                 sm.StartOneGame();
+        }
+
+        EditorGUILayout.Space(4);
+        if (GUILayout.Button("根据 SlotItems 自动填充 PrizeStartProgresses（等分）"))
+        {
+            int n = sm.SlotItems.Count;
+            sm.PrizeStartProgresses.Clear();
+            for (int i = 0; i < n; i++)
+                sm.PrizeStartProgresses.Add((float)i / n);
+            UnityEditor.EditorUtility.SetDirty(sm);
         }
     }
 }
