@@ -92,21 +92,30 @@ public class AlwaysOnTop : MonoBehaviour {
 
     #endregion
 
+    // 缓存上次应用的置顶状态，避免每帧重复设置和打日志
+    private bool? _lastAppliedTopmost;
 
-    // Use this for initialization
     void Update() {
-        AssignTopmostWindow("SuiLive", ConfigManager.Config.WindowSize.StayOnTop);
+        bool wantTopmost = ConfigManager.Config.WindowSize.StayOnTop;
+        if (_lastAppliedTopmost.HasValue && _lastAppliedTopmost.Value == wantTopmost)
+            return;
+        if (AssignTopmostWindow("SuiLive", wantTopmost))
+            _lastAppliedTopmost = wantTopmost;
     }
 
     public bool AssignTopmostWindow(string WindowTitle, bool MakeTopmost) {
-        UnityEngine.Debug.Log("Assigning top most flag to window of title: " + WindowTitle);
-
         System.IntPtr hWnd = FindWindow((string)null, WindowTitle);
+        if (hWnd == IntPtr.Zero)
+            return false;
 
         RECT rect = new RECT();
-        GetWindowRect(new HandleRef(this, hWnd), out rect);
+        if (!GetWindowRect(new HandleRef(this, hWnd), out rect))
+            return false;
 
-        return SetWindowPos(hWnd, MakeTopmost ? HWND_TOPMOST : HWND_NOT_TOPMOST, rect.X, rect.Y, rect.Width, rect.Height, SWP_SHOWWINDOW);
+        bool ok = SetWindowPos(hWnd, MakeTopmost ? HWND_TOPMOST : HWND_NOT_TOPMOST, rect.X, rect.Y, rect.Width, rect.Height, SWP_SHOWWINDOW);
+        if (ok)
+            UnityEngine.Debug.Log("Assigning top most flag to window of title: " + WindowTitle + " -> " + (MakeTopmost ? "topmost" : "not topmost"));
+        return ok;
     }
 
     private string[] GetWindowTitles() {
